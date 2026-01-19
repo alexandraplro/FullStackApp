@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "3G4HajACjCA=",
+  "success": true,
+  "projectFilePath": "/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/ServerApp.csproj",
+  "expectedPackageFiles": [
+    "/Users/claudiaplazas/.nuget/packages/microsoft.aspnetcore.openapi/9.0.10/microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
+    "/Users/claudiaplazas/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
