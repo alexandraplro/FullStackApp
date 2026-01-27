@@ -28,20 +28,20 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ291bnRlci5yYXpvcg==
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Contact.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/FetchProducts.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRmV0Y2hQcm9kdWN0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Fun.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRnVuLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvV2VhdGhlci5yYXpvcg==
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/_Imports.razor]

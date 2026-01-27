@@ -6,8 +6,10 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/ServerApp.runtimeconfig.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/ServerApp.dll
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/ServerApp.pdb
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/Microsoft.OpenApi.dll
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.csproj.AssemblyReference.cache
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/rpswa.dswa.cache.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.GeneratedMSBuildEditorConfig.editorconfig
@@ -16,6 +18,7 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.csproj.CoreCompileInputs.cache
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.MvcApplicationPartsAssemblyInfo.cs
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.MvcApplicationPartsAssemblyInfo.cache
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/ServerApp.sourcelink.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/rjimswa.dswa.cache.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/rjsmrazor.dswa.cache.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ServerApp/obj/Debug/net9.0/rjsmcshtml.dswa.cache.json

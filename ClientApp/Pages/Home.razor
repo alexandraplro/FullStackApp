@@ -2,6 +2,48 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="home-container">
+    <div class="home-card">
+        <h1 class="home-title">Welcome to InventoryHub</h1>
 
-Welcome to your new app.
+        <p class="home-text">
+            Explore a dynamic inventory of products, complete with categories, icons, pricing,
+            and real-time data from our API.
+        </p>
+
+        <p class="home-text">
+            Use the navigation menu to browse products and experience the full stack in action.
+        </p>
+    </div>
+</div>
+
+<style>
+    .home-container {
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .home-card {
+        max-width: 600px;
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .home-title {
+        margin-bottom: 16px;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .home-text {
+        margin-bottom: 12px;
+        color: #555;
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+</style>

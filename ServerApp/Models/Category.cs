@@ -1,9 +1,7 @@
-namespace ClientApp.Models
+namespace ServerApp.Models
 {
     /// <summary>
-    /// Represents a product category within the inventory system.
-    /// This model is designed to match the JSON structure returned by the API
-    /// and ensures smooth deserialization in the Blazor front-end.
+    /// Represents a product category in the inventory system.
     /// </summary>
     public class Category
     {
@@ -14,7 +12,6 @@ namespace ClientApp.Models
 
         /// <summary>
         /// Human-readable category name (e.g., Electronics, Accessories).
-        /// Initialized to an empty string to prevent null-reference issues in the UI.
         /// </summary>
         public string Name { get; set; } = string.Empty;
     }
