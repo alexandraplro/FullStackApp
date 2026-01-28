@@ -1,53 +1,31 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">ClientApp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-
-        <!-- Home -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+﻿<nav class="side-nav">
+    <ul>
+        <li>
+            <NavLink href="/" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill"></span>
+                Home
             </NavLink>
-        </div>
+        </li>
 
-        <!-- Fetch Products -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchproducts">
-                <span class="bi bi-bag-fill-nav-menu" aria-hidden="true"></span> Products
+        <li>
+            <NavLink href="/fetchproducts">
+                <span class="bi bi-bag-fill"></span>
+                Products
             </NavLink>
-        </div>
+        </li>
 
-        <!-- Fun Counter -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fun">
-                <span class="bi bi-emoji-smile-fill-nav-menu" aria-hidden="true"></span> Fun Facts
+        <li>
+            <NavLink href="/fun">
+                <span class="bi bi-emoji-smile-fill"></span>
+                Fun Facts
             </NavLink>
-        </div>
+        </li>
 
-        <!-- Contact -->
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="contact">
-                <span class="bi bi-person-lines-fill-nav-menu" aria-hidden="true"></span> Contact
+        <li>
+            <NavLink href="/contact">
+                <span class="bi bi-person-lines-fill"></span>
+                Contact
             </NavLink>
-        </div>
-
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+        </li>
+    </ul>
+</nav>

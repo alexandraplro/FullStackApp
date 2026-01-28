@@ -28,6 +28,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/About.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQWJvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Contact.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
