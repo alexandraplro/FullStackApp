@@ -1,9 +1,10 @@
 @page "/fetchproducts"
-@inject HttpClient Http
-@using ClientApp.Models
-@using System.Text.Json
+@inject HttpClient Http;
+@using ClientApp.Models;
+@using System.Text.Json;
+@layout MainLayout;
 
-<h3>Product List</h3>
+<h2 class="page-title">Product List</h2>
 
 <div class="sort-bar">
 
@@ -41,34 +42,40 @@
 
 @if (products == null)
 {
-    <ul><li>Loading...</li></ul>
+    <p style="text-align:center;">Loading...</p>
 }
 else if (products.Length == 0)
 {
-    <ul><li>No products available.</li></ul>
+    <p style="text-align:center;">No products available.</p>
 }
 else
 {
+    <p style="text-align:center; color: var(--text-light); margin-bottom: 10px;">
+        Showing @products.Length products
+    </p>
+
     <div class="product-grid">
         @foreach (var product in products)
         {
             <div class="product-card">
                 <img src="@product.ImageUrl"
-                     alt="@product.Name"
-                     class="product-image" />
+                    alt="@product.Name"
+                    class="product-image"
+                    onerror="this.src='/images/icons/default.png'" />
 
                 <div class="product-info">
                     <div class="product-name">@product.Name</div>
                     <div class="product-price">$@product.Price</div>
                 </div>
             </div>
+
         }
     </div>
 }
 
 @code {
 
-    private Product[] products = Array.Empty<Product>();
+    private Product[]? products = null;   // IMPORTANT FIX
     private List<string> categories = new();
     private string currentSort = "";
     private bool sortAscending = true;
@@ -88,10 +95,11 @@ else
             products = JsonSerializer.Deserialize<Product[]>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
-            }) ?? Array.Empty<Product>();
+            });
 
+            Console.WriteLine($"Loaded {products?.Length ?? 0} products.");
 
-            categories = products
+            categories = products!
                 .Select(p => p.Category?.Name ?? "")
                 .Where(c => !string.IsNullOrWhiteSpace(c))
                 .Distinct()

@@ -398,3 +398,24 @@ code {
 .nav-title:hover {
     text-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
 }
+
+.landing-header {
+    margin-top: -20px;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--brand-green);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    background-color: transparent;
+    border-radius: 8px;
+    display: block;
+}
