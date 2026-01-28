@@ -1,20 +1,23 @@
 /* --------------------------------------------------
-   GLOBAL BRAND COLORS
+   ECO-THEMED BRAND PALETTE
 -------------------------------------------------- */
 
 :root {
-    --brand-green: #2E8B57;
-    --brand-yellow: #FFD700;
-    --text-dark: #333;
+    --brand-green: #4CAF50;       /* Leafy green */
+    --brand-earth: #8D6E63;       /* Soil tone */
+    --brand-sky: #64B5F6;         /* Sky blue */
+    --brand-sun: #FFD700;         /* Sunlight yellow */
+    --brand-neutral: #F5F5DC;     /* Light beige */
+    --text-dark: #2E2E2E;
     --text-light: #555;
-    --bg-light: #f7f7f7;
+    --bg-light: var(--brand-neutral);
     --border-light: #ddd;
     --card-radius: 12px;
     --transition-fast: 0.2s ease;
 }
 
 /* --------------------------------------------------
-   GLOBAL BASE STYLES
+   BASE STYLES
 -------------------------------------------------- */
 
 html, body {
@@ -27,7 +30,7 @@ html, body {
 
 h1, h2, h3, h4 {
     font-weight: 600;
-    color: #222;
+    color: var(--text-dark);
 }
 
 a, .btn-link {
@@ -37,32 +40,132 @@ a, .btn-link {
 }
 
 a:hover {
-    color: var(--brand-yellow);
+    color: var(--brand-sun);
 }
 
 /* --------------------------------------------------
-   GLOBAL CARD STYLE
+   PRODUCT GRID
 -------------------------------------------------- */
 
-.card, .fun-card, .contact-card, .home-card, .product-card {
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 10px;
+}
+
+/* --------------------------------------------------
+   PRODUCT CARD
+-------------------------------------------------- */
+
+.product-card {
     background: #fff;
     border: 1px solid var(--border-light);
     border-radius: var(--card-radius);
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.card:hover,
-.fun-card:hover,
-.contact-card:hover,
-.home-card:hover,
 .product-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
+.product-image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border-radius: 8px;
+}
+
+.product-info {
+    text-align: center;
+}
+
+.product-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.product-price {
+    color: var(--text-light);
+}
+
 /* --------------------------------------------------
-   BUTTONS — BRAND COLORS + TRANSITIONS
+   SORTING CONTROLS
+-------------------------------------------------- */
+
+.sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.sort-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.sort-btn {
+    background-color: var(--brand-green);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.sort-btn:hover {
+    background-color: #388E3C;
+    transform: translateY(-2px);
+}
+
+.sort-btn:active {
+    background-color: #2E7D32;
+    transform: translateY(0);
+}
+
+.sort-btn.active-sort {
+    background-color: var(--brand-sun);
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.sort-dropdown {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+    background-color: #fff;
+    font-size: 0.95rem;
+}
+
+.reset-btn {
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.reset-btn:hover {
+    background-color: #b5b5b5;
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------
+   BUTTONS
 -------------------------------------------------- */
 
 .btn-primary {
@@ -76,12 +179,12 @@ a:hover {
 }
 
 .btn-primary:hover {
-    background-color: #267349;
+    background-color: #388E3C;
     transform: translateY(-2px);
 }
 
 .btn-primary:active {
-    background-color: #1f5c3a;
+    background-color: #2E7D32;
     transform: translateY(0);
 }
 
@@ -90,11 +193,11 @@ a:hover {
 .btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
-    box-shadow: 0 0 0 0.15rem rgba(46, 139, 87, 0.35);
+    box-shadow: 0 0 0 0.15rem rgba(76, 175, 80, 0.35);
 }
 
 /* --------------------------------------------------
-   NAV MENU — BRAND COLORS + MODERN LOOK
+   NAVIGATION
 -------------------------------------------------- */
 
 .navbar {
@@ -197,93 +300,101 @@ code {
     color: #888;
 }
 
-.sort-bar {
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-left,
+.nav-right {
+    width: 25%;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
 }
 
-.sort-label {
+.nav-title {
+    width: 50%;
+    text-align: center;
+    font-size: 1.4rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--brand-green);
+    letter-spacing: 0.5px;
 }
 
-.sort-btn {
-    background-color: var(--brand-green);
-    color: #fff;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
+/* --------------------------------------------------
+   NAVBAR TITLE + LAYOUT
+-------------------------------------------------- */
+
+.eco-navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid var(--border-light);
 }
 
-.sort-btn:hover {
-    background-color: #267349;
-    transform: translateY(-2px);
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.sort-btn:active {
-    background-color: #1f5c3a;
-    transform: translateY(0);
-}
-
-.sort-bar {
+.nav-left,
+.nav-right {
+    width: 25%;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
 }
 
-.sort-label {
+.nav-title {
+    width: 50%;
+    text-align: center;
+    font-size: 1.45rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--brand-green);
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: transform var(--transition-fast), color var(--transition-fast);
 }
 
-.sort-btn {
+.nav-title:hover {
+    transform: translateY(-2px);
+    color: var(--brand-sun);
+}
+
+/* Leaf icon animation */
+.nav-title-icon {
+    font-size: 1.4rem;
+    transition: transform var(--transition-fast);
+}
+
+.nav-title:hover .nav-title-icon {
+    transform: rotate(12deg) scale(1.1);
+}
+
+.nav-title {
+    position: relative;
+}
+
+.nav-title::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0%;
+    height: 3px;
     background-color: var(--brand-green);
-    color: #fff;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    transition: width 0.3s ease, left 0.3s ease;
 }
 
-.sort-btn:hover {
-    background-color: #267349;
-    transform: translateY(-2px);
+.nav-title:hover::after {
+    width: 60%;
+    left: 20%;
 }
 
-.sort-btn.active-sort {
-    background-color: var(--brand-yellow);
-    color: #333;
-    font-weight: 600;
-}
-
-.sort-dropdown {
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border-light);
-    background-color: #fff;
-    font-size: 0.95rem;
-}
-
-.reset-btn {
-    background-color: #ccc;
-    color: #333;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.reset-btn:hover {
-    background-color: #b5b5b5;
-    transform: translateY(-2px);
+.nav-title:hover {
+    text-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
 }

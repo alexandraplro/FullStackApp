@@ -2,23 +2,34 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="home-container">
-    <div class="home-card">
-        <h1 class="home-title">Welcome to InventoryHub</h1>
+<header class="landing-header">
+    <div class="landing-content">
 
-        <p class="home-text">
-            Explore a dynamic inventory of products, complete with categories, icons, pricing,
-            and real-time data from our API.
+        <div class="landing-title">
+            <span class="landing-icon">🌱</span>
+            InventoryHub
+        </div>
+
+        <p class="landing-subtitle">
+            A clean, modern, eco‑friendly inventory management app built for clarity, speed, and sustainability.
         </p>
 
+        <div class="landing-actions">
+            <NavLink href="/fetchproducts" class="btn-primary landing-btn">
+                View Products
+            </NavLink>
+
+            <NavLink href="/about" class="btn-secondary landing-btn">
+                Learn More
+            </NavLink>
+        </div>
         <p class="home-text">
             Use the navigation menu to browse products and experience the full stack in action.
         </p>
     </div>
-</div>
+</header>
 
-<style>
-    .home-container {
+<style>    .home-container {
         display: flex;
         justify-content: center;
         padding: 40px 20px;

@@ -1,16 +1,24 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light eco-navbar">
+    <div class="container-fluid nav-container">
+
+        <!-- Left side (existing links) -->
+        <div class="nav-left">
+            <NavLink class="nav-link" href="">About</NavLink>
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <!-- Center title -->
+        <div class="nav-title">
+            <span class="nav-title-icon">🌱</span>
+            InventoryHub App
+        </div>
+
+        <!-- Right side (future links) -->
+        <div class="nav-right">
+            <!-- Placeholder for future items -->
+        </div>
+
+    </div>
+</nav>
+

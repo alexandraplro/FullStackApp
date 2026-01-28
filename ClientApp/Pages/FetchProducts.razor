@@ -1,8 +1,7 @@
 @page "/fetchproducts"
-@inject HttpClient Http;
-@using ClientApp.Models;
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
+@inject HttpClient Http
+@using ClientApp.Models
+@using System.Text.Json
 
 <h3>Product List</h3>
 
@@ -10,19 +9,19 @@
 
     <span class="sort-label">Sort By:</span>
 
-    <button class="sort-btn @(ActiveSort("name"))" @onclick="() => ApplySort("name")">
+    <button class="sort-btn @(ActiveSort("name"))" @onclick="@(() => ApplySort("name"))">
         Name @SortIcon("name")
     </button>
 
-    <button class="sort-btn @(ActiveSort("price"))" @onclick="() => ApplySort("price")">
+    <button class="sort-btn @(ActiveSort("price"))" @onclick="@(() => ApplySort("price"))">
         Price @SortIcon("price")
     </button>
 
-    <button class="sort-btn @(ActiveSort("stock"))" @onclick="() => ApplySort("stock")">
+    <button class="sort-btn @(ActiveSort("stock"))" @onclick="@(() => ApplySort("stock"))">
         Stock @SortIcon("stock")
     </button>
 
-    <button class="sort-btn @(ActiveSort("dateadded"))" @onclick="() => ApplySort("dateadded")">
+    <button class="sort-btn @(ActiveSort("dateadded"))" @onclick="@(() => ApplySort("dateadded"))">
         Date Added @SortIcon("dateadded")
     </button>
 
@@ -39,7 +38,6 @@
     </button>
 
 </div>
-
 
 @if (products == null)
 {
@@ -67,11 +65,10 @@ else
         }
     </div>
 }
-    
 
 @code {
 
-    private List<Product> products = new();
+    private Product[] products = Array.Empty<Product>();
     private List<string> categories = new();
     private string currentSort = "";
     private bool sortAscending = true;
@@ -79,16 +76,39 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        products = await Http.GetFromJsonAsync<List<Product>>("api/products");
-        categories = products.Select(p => p.Category).Distinct().OrderBy(c => c).ToList();
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+            var response = await Http.GetAsync("http://localhost:5212/api/products", cts.Token);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            products = JsonSerializer.Deserialize<Product[]>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? Array.Empty<Product>();
+
+
+            categories = products
+                .Select(p => p.Category?.Name ?? "")
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error loading products: {ex.Message}");
+            products = Array.Empty<Product>();
+        }
     }
 
     private async Task ApplySort(string field)
     {
         if (currentSort == field)
-        {
-            sortAscending = !sortAscending; // toggle direction
-        }
+            sortAscending = !sortAscending;
         else
         {
             currentSort = field;
@@ -97,15 +117,13 @@ else
 
         var direction = sortAscending ? "asc" : "desc";
 
-        products = await Http.GetFromJsonAsync<List<Product>>(
+        products = await Http.GetFromJsonAsync<Product[]>(
             $"api/products/sorted?sortBy={field}&direction={direction}"
         );
     }
 
     private string ActiveSort(string field)
-    {
-        return currentSort == field ? "active-sort" : "";
-    }
+        => currentSort == field ? "active-sort" : "";
 
     private MarkupString SortIcon(string field)
     {
@@ -123,11 +141,11 @@ else
 
         if (string.IsNullOrWhiteSpace(selectedCategory))
         {
-            products = await Http.GetFromJsonAsync<List<Product>>("api/products");
+            products = await Http.GetFromJsonAsync<Product[]>("api/products");
         }
         else
         {
-            products = await Http.GetFromJsonAsync<List<Product>>(
+            products = await Http.GetFromJsonAsync<Product[]>(
                 $"api/products/filter?category={selectedCategory}"
             );
         }
@@ -138,121 +156,6 @@ else
         currentSort = "";
         sortAscending = true;
         selectedCategory = "";
-        products = await Http.GetFromJsonAsync<List<Product>>("api/products");
+        products = await Http.GetFromJsonAsync<Product[]>("api/products");
     }
-    private async Task SortProducts(string sortBy)
-    {
-
-        products = await Http.GetFromJsonAsync<List<Product>>(
-            $"api/products/sorted?sortBy={sortBy}"
-        ))?.ToArray();
-    }
-    // Holds the list of products retrieved from the API.
-    // Copilot recommended initializing this with Array.Empty to avoid null checks in the UI.
-    private Product[]? products;
-    
-    /// <summary>
-    /// Lifecycle method that runs when the component initializes.
-    /// Copilot helped structure this method to include:
-    /// - Timeout protection using CancellationTokenSource
-    /// - Explicit HTTP status validation with EnsureSuccessStatusCode
-    /// - Manual JSON deserialization for assignment requirements
-    /// - Nested try/catch blocks to handle malformed JSON gracefully
-    /// </summary>
-    protected override async Task OnInitializedAsync()
-    {
-        // Copilot suggested initializing the array early to ensure the UI always has a safe fallback.
-        products = Array.Empty<Product>();
-
-        try
-        {
-            // Copilot recommended adding a timeout to prevent the UI from hanging on slow API calls.
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
-            // Copilot helped refine the API endpoint call and ensure proper error handling.
-            var response = await Http.GetAsync("http://localhost:5212/api/products", cts.Token);
-            response.EnsureSuccessStatusCode();
-
-            // Copilot suggested reading raw JSON to meet the assignment's requirement for manual deserialization instead of using GetFromJsonAsync.
-            var json = await response.Content.ReadAsStringAsync();
-
-            try
-            {
-                // Copilot recommended enabling case-insensitive matching to ensure the front-end correctly deserializes the back-end's JSON regardless of casing.
-                var result = JsonSerializer.Deserialize<ProductResponse>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                // Copilot suggested using the null-coalescing operator to avoid null reference issues.
-                products = result?.Products ?? Array.Empty<Product>();
-            }
-            catch (Exception jsonEx)
-            {
-                // Copilot recommended logging JSON errors to help diagnose malformed responses.
-                Console.WriteLine($"JSON deserialization error: {jsonEx.Message}");
-                products = Array.Empty<Product>();
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // Copilot suggested catching timeout exceptions separately for clearer debugging.
-            Console.Error.WriteLine("API request timed out.");
-            products = Array.Empty<Product>();
-        }
-        catch (Exception ex)
-        {
-            // Copilot recommended a general catch block to ensure the UI never crashes.
-            Console.Error.WriteLine($"Unexpected error: {ex.Message}");
-            products = Array.Empty<Product>();
-        }
-    }
-    
 }
-
-
-<style>
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px;
-        padding: 10px;
-    }
-
-    .product-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        background: #fff;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .product-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .product-image {
-        width: 70px;
-        height: 70px;
-        object-fit: contain;
-        margin-bottom: 10px;
-    }
-
-    .product-info {
-        text-align: center;
-    }
-
-    .product-name {
-        font-weight: bold;
-        margin-bottom: 4px;
-    }
-
-    .product-price {
-        color: #555;
-    }
-</style>
