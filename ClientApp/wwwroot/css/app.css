@@ -4,9 +4,9 @@
 
 :root {
     --brand-green: #2E8B57;          /* Leafy green */
-    --brand-green-light: #81C784;    /* Light green hover */
-    --brand-yellow: #FFD700;         /* Sunlight yellow */
-    --brand-beige: #F5F5DC;          /* Light beige background */
+    --brand-green-light: #81C784;    /* Light green hover */         /* Sunlight yellow */
+    --brand-beige: #F5F5DC; 
+    --brand-yellow: #ffcc31;         /* Light beige background */
     --brand-blue: #64B5F6;           /* Sky blue accent */
     --brand-brown: #8D6E63;          /* Earthy brown */
     --brand-gray: #37474F;           /* Deep gray text */
@@ -202,8 +202,9 @@ a:hover {
 }
 
 .sort-btn:active {
-    background-color: #2E7D32;
+    background-color: ffcc31;
     transform: translateY(0);
+    color: white;
 }
 
 .sort-btn.active-sort {
