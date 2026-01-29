@@ -199,6 +199,8 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_CJK.tjcz0u77k5.dat
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_EFIGS.tptq2av103.dat
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_no_CJK.lfu7j35m59.dat
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.dzcavfhdsr.wasm
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.aylv7lsjsq.pdb
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/blazor.boot.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/blazor.webassembly.js.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/Microsoft.AspNetCore.Authorization.50odlujk1g.wasm.gz
@@ -401,6 +403,8 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_CJK.tjcz0u77k5.dat.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_EFIGS.tptq2av103.dat.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/icudt_no_CJK.lfu7j35m59.dat.gz
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.dzcavfhdsr.wasm.gz
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.aylv7lsjsq.pdb.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/blazor.boot.json.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/ClientApp.staticwebassets.runtime.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/ClientApp.staticwebassets.endpoints.json
@@ -815,6 +819,7 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/scopedcss/projectbundle/ClientApp.bundle.scp.css
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/blazor.build.boot-extension.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/blazor.boot.json
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/wuxe731mqv-3mdk2uxoxv.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/29pem7kxd4-t8vkdcgx5t.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/3zloelk248-bqjiyaj88i.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/k2v8qsgmvz-c2jlpeoesf.gz
@@ -1064,6 +1069,9 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/cnkr2tti6u-tjcz0u77k5.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/4adg7haxbc-tptq2av103.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/l3p8rvglcy-lfu7j35m59.gz
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/kwzkrbi5h4-dzcavfhdsr.gz
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/ftph3tm72y-aylv7lsjsq.gz
+/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/rot3wv43ix-tzk3zllnkz.gz
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/staticwebassets.build.json
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/staticwebassets.build.json.cache
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/staticwebassets.development.json
@@ -1073,11 +1081,3 @@
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/refint/ClientApp.dll
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/ClientApp.pdb
 /Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/ref/ClientApp.dll
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.n52v7kebkd.wasm
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.o4z260o8eq.pdb
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.n52v7kebkd.wasm.gz
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/bin/Debug/net9.0/wwwroot/_framework/ClientApp.o4z260o8eq.pdb.gz
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/kwzkrbi5h4-n52v7kebkd.gz
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/ftph3tm72y-o4z260o8eq.gz
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/rot3wv43ix-ch36fwk1ul.gz
-/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/obj/Debug/net9.0/compressed/wuxe731mqv-td0uqepa6r.gz
