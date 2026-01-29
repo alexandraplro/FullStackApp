@@ -239,6 +239,7 @@ a:hover {
     padding: 0.45rem 1rem;
     font-weight: 500;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
+    align-items: center;
 }
 
 .btn-primary:hover {
@@ -263,7 +264,7 @@ a:hover {
 
 .nav-container {
     display: flex;
-    background-color: var(--brand-blue);
+    background-color: var(--brand-beige);
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -274,7 +275,8 @@ a:hover {
     width: 25%;
     display: flex;
     align-items: center;
-    color: var(--brand-gray)
+    color: var(--brand-gray);
+    font-size: 14px;
 }
 
 .nav-title {
@@ -576,12 +578,7 @@ a:hover {
 }
 
 /* Sidebar */
-.sidebar {
-    width: 220px;
-    background-color: #e6f4e6;
-    padding: 20px;
-    box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-}
+
 
 /* Sidebar nav */
 
@@ -640,6 +637,7 @@ a:hover {
      font-size: 2rem;
      font-weight: bold;
  }
+
  .home-text {
      margin-bottom: 12px;
      color: #555;
@@ -663,4 +661,22 @@ a:hover {
         margin-bottom: 24px;
         font-size: medium;
         color: #37474F;
+ }
+
+ .fun.fun-container{
+        display: flex;
+        justify-content: center;
+        background-color: var(--brand-beige);
+        padding: 40px 20px;
+        font-size: medium;
+        color: var(--brand-gray);
+ }
+
+ .contact.contact-container{
+        display: flex;
+        justify-content: center;
+        background-color: var(--brand-beige);
+        padding: 40px 20px;
+        font-size: medium;
+        color: var(--brand-gray);
  }
