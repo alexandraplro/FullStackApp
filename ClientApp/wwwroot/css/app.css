@@ -23,7 +23,7 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: var(--brand-beige);
+    background-color: white;
     color: var(--brand-gray);
     margin: 0;
     padding: 0;
@@ -53,7 +53,11 @@ a:hover {
     display: flex;
     min-height: 100vh;
     background-color: white;
+    flex: 1;
+    color: var(--brand-gray);
+    font-size: 16px;
 }
+
 
 .sidebar { 
     background: #fffae5 !important; 
@@ -203,8 +207,8 @@ a:hover {
 }
 
 .sort-btn.active-sort {
-    background-color: var(--brand-yellow);
-    color: var(--brand-gray);
+    background-color: #ffcc31;
+    color: white;
     font-weight: 600;
 }
 
@@ -246,6 +250,7 @@ a:hover {
     font-weight: 500;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
     margin: 0 10px;
+    margin-top: 10px;
 }
 
 .btn-primary:hover {
@@ -585,16 +590,6 @@ a:hover {
     cursor: pointer;
 }
 
-/* Layout container */
-.layout-container {
-    display: flex;
-    flex: 1;
-    min-height: 100vh;
-    background-color: var(--brand-green);
-    color: var(--brand-beige);
-    font-size: 16px;
-    border: 2px solid var(--brand-green-light);
-}
 
 /* Sidebar nav */
 
@@ -635,13 +630,20 @@ a:hover {
 .content-area {
     flex: 1;
     padding: 40px;
+    background-color: white;
+    color: var(--brand-gray);
+    font-size: 22px;
 }
 
  .home-container {
      display: flex;
      justify-content: center;
      padding: 40px 20px;
+     background-color: white;
+     color: var(--brand-gray);
+     font-size: 22px;
  }
+
  .home-card {
      max-width: 600px;
      padding: 30px;
@@ -683,7 +685,7 @@ a:hover {
         text-align: center;
  }
 
- .fun.fun-container{
+.fun-container{
         display: flex;
         justify-content: center;
         background-color: var(--brand-beige);
@@ -692,7 +694,7 @@ a:hover {
         color: var(--brand-gray);
  }
 
- .contact.contact-container{
+ .contact-container{
         display: flex;
         justify-content: center;
         background-color: var(--brand-beige);
@@ -706,7 +708,6 @@ a:hover {
      color: var(--brand-beige);
      text-align: center;
      padding: 25px 20px;
-     margin-top: 40px;
      font-size: 16px;
      border: 2px solid var(--brand-gray);
 
