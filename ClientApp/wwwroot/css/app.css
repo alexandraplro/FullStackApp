@@ -13,6 +13,7 @@
     --border-light: #ddd;
     --card-radius: 12px;
     --transition-fast: 0.2s ease;
+    --font-family-base: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 
@@ -55,7 +56,7 @@ a:hover {
 }
 
 .sidebar { 
-    background: white !important; 
+    background: #fffae5 !important; 
     background-image: none !important; 
     color: white; 
     width: 230px; 
@@ -115,7 +116,7 @@ a:hover {
 }
 
 .product-card {
-    background: #fff;
+    background: white;
     border: 1px solid var(--border-light);
     border-radius: var(--card-radius);
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
@@ -153,11 +154,11 @@ a:hover {
 
 .product-category {
     font-size: 0.95rem;
-    color: var(--brand-brown);
+    color: #37818a;
 }
 
 .product-price {
-    color: var(--brand-blue);
+    color: var(--brand-brown);
 }
 
 
@@ -175,12 +176,13 @@ a:hover {
 }
 
 .sort-label {
-    font-weight: 600;
-    color: var(--brand-gray);
+    font-weight: 1000;
+    font-size: 24px;
+    color: #37818a;
 }
 
 .sort-btn {
-    background-color: var(--brand-green);
+    background-color: #ffcc31;
     color: #fff;
     border: none;
     padding: 6px 14px;
@@ -212,11 +214,12 @@ a:hover {
     border: 1px solid var(--border-light);
     background-color: #fff;
     font-size: 0.95rem;
+    color: #022d6b;
 }
 
 .reset-btn {
-    background-color: #ccc;
-    color: #333;
+    background-color: var(--brand-blue);
+    color: white;
     border: none;
     padding: 6px 14px;
     border-radius: 6px;
@@ -225,7 +228,7 @@ a:hover {
 }
 
 .reset-btn:hover {
-    background-color: #b5b5b5;
+    background-color: var(--brand-gray);
     transform: translateY(-2px);
 }
 
@@ -329,7 +332,7 @@ a:hover {
 .page-title {
     font-size: 2rem;
     font-weight: 600;
-    color: var(--brand-green);
+    color: #022d6b;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -585,8 +588,12 @@ a:hover {
 /* Layout container */
 .layout-container {
     display: flex;
+    flex: 1;
     min-height: 100vh;
-    background-color: white;
+    background-color: var(--brand-green);
+    color: var(--brand-beige);
+    font-size: 16px;
+    border: 2px solid var(--brand-green-light);
 }
 
 /* Sidebar nav */
@@ -673,6 +680,7 @@ a:hover {
         margin-bottom: 24px;
         font-size: medium;
         color: #37474F;
+        text-align: center;
  }
 
  .fun.fun-container{
@@ -692,3 +700,15 @@ a:hover {
         font-size: medium;
         color: var(--brand-gray);
  }
+
+ .app-footer {
+     background-color: #37818a;
+     color: var(--brand-beige);
+     text-align: center;
+     padding: 25px 20px;
+     margin-top: 40px;
+     font-size: 16px;
+     border: 2px solid var(--brand-gray);
+
+ }
+

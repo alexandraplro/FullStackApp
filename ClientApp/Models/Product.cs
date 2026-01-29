@@ -1,39 +1,17 @@
 namespace ClientApp.Models
 {
-    /// Represents a product returned by the back-end API.
-    /// This model is designed for a full inventory system with sorting, filtering, and UI display.
     public class Product
     {
-        /// Unique identifier for the product.
         public int Id { get; set; }
-
-        /// Human-readable product name.
         public string Name { get; set; } = string.Empty;
-
-        /// Price of the product.
-        public double Price { get; set; }
-
-        /// Quantity of the product available in stock.
+        public decimal Price { get; set; }
         public int Stock { get; set; }
-
-        /// Category information for the product.
-        public Category Category { get; set; } = new Category();
-
-        /// Unique SKU code for inventory tracking.
+        public Category Category { get; set; } = new();
         public string SKU { get; set; } = string.Empty;
-
-        /// Supplier or vendor name.
         public string Supplier { get; set; } = string.Empty;
-
-        /// Date the product was added to the inventory.
-        public DateTime DateAdded { get; set; } = DateTime.UtcNow;
-
-        /// Indicates whether the product is active/visible in the inventory.
-        public bool IsActive { get; set; } = true;
-
-        /// Minimum stock level before triggering a reorder.
-        public int ReorderLevel { get; set; } = 10;
-
+        public DateTime DateAdded { get; set; }
+        public bool IsActive { get; set; }
+        public int ReorderLevel { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
     }
 }
