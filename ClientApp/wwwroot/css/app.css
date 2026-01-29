@@ -257,12 +257,13 @@ a:hover {
 -------------------------------------------------- */
 
 .eco-navbar {
-    background-color: #ffffff !important;
+    background-color: var(--brand-beige) !important;
     border-bottom: 1px solid var(--border-light);
 }
 
 .nav-container {
     display: flex;
+    background-color: var(--brand-blue);
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -273,6 +274,7 @@ a:hover {
     width: 25%;
     display: flex;
     align-items: center;
+    color: var(--brand-gray)
 }
 
 .nav-title {
@@ -303,6 +305,7 @@ a:hover {
 .nav-title:hover .nav-title-icon {
     transform: rotate(12deg) scale(1.1);
 }
+
 
 
 /* --------------------------------------------------
@@ -643,4 +646,21 @@ a:hover {
      font-size: 1.1rem;
      line-height: 1.5;
  }
- 
+
+ .home.landing-subtitle{
+        margin-bottom: 24px;
+        font-size: medium;
+        color: #37474F;
+ } 
+
+ .home.home-text{
+        margin-bottom: 24px;
+        font-size: medium;
+        color: #37474F;
+ }
+
+ .about.about-text{
+        margin-bottom: 24px;
+        font-size: medium;
+        color: #37474F;
+ }
