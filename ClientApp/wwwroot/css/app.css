@@ -197,12 +197,12 @@ a:hover {
 }
 
 .sort-btn:hover {
-    background-color: var(--brand-green-light);
+    background-color: #ffd84d;
     transform: translateY(-2px);
 }
 
 .sort-btn:active {
-    background-color: ffcc31;
+    background-color: #e6b800;
     transform: translateY(0);
     color: white;
 }
@@ -212,6 +212,7 @@ a:hover {
     color: white;
     font-weight: 600;
 }
+
 
 .sort-dropdown {
     padding: 6px 10px;
