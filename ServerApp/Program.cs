@@ -13,9 +13,12 @@ namespace ServerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Register EF Core with InMemory provider
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("ApplicationDbContext"));
+                options.UseSqlite("Data Source=inventory.db"));
 
+            // Register controllers (REQUIRED for EF migrations + your API controllers)
+            builder.Services.AddControllers();
 
             // Enable CORS for the Blazor client
             builder.Services.AddCors(options =>
@@ -28,7 +31,7 @@ namespace ServerApp
                 });
             });
 
-            // Add Swagger for API documentation (optional but great for portfolio)
+            // Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -36,20 +39,17 @@ namespace ServerApp
 
             app.UseCors();
 
-            // Enable Swagger UI
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            // Generate 100 seeded products
+            // Map controllers (REQUIRED)
+            app.MapControllers();
+
+            // Minimal API endpoints (optional)
             var products = SeedData.GetProducts();
 
-            // GET: Return all products
-            app.MapGet("/api/products", () =>
-            {
-                return Results.Ok(products);
-            });
+            app.MapGet("/api/products", () => Results.Ok(products));
 
-            // GET: Sorted products (optional)
             app.MapGet("/api/products/sorted", (string sortBy) =>
             {
                 IEnumerable<Product> sorted = sortBy.ToLower() switch
@@ -58,10 +58,10 @@ namespace ServerApp
                     "name" => products.OrderBy(p => p.Name),
                     "stock" => products.OrderByDescending(p => p.Stock),
                     "date" => products.OrderByDescending(p => p.DateAdded),
-                    _   => products
+                    _ => products
                 };
-            
-            return Results.Ok(sorted);
+
+                return Results.Ok(sorted);
             });
 
             app.Run();

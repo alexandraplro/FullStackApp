@@ -4,6 +4,5 @@ namespace ServerApp.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        // Add custom fields later if needed
     }
 }
