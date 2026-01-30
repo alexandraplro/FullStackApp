@@ -40,12 +40,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRmV0Y2hQcm9kdWN0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Fun.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRnVuLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Sales.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2FsZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/_Imports.razor]

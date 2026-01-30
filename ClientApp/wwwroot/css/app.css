@@ -52,7 +52,7 @@ a:hover {
 .layout-container {
     display: flex;
     min-height: 100vh;
-    background-color: white;
+    background-color: var(--brand-beige);
     flex: 1;
     color: var(--brand-gray);
     font-size: 16px;
@@ -103,7 +103,7 @@ a:hover {
 .content-area {
     flex: 1;
     padding: 40px;
-    background-color: var(--brand-beige);
+    background-color: white;
     color: var(--brand-gray);
 }
 
@@ -231,6 +231,7 @@ a:hover {
     border-radius: 6px;
     cursor: pointer;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
+    font-size: 0.95rem;
 }
 
 .reset-btn:hover {
@@ -283,22 +284,17 @@ a:hover {
     border-bottom: 1px solid var(--border-light);
 }
 
-.nav-container {
-    display: flex;
-    background-color: var(--brand-gray);
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
 .nav-left,
 .nav-right {
-    width: 25%;
     display: flex;
     align-items: center;
     color: var(--brand-beige);
     font-size: 24px;
-    margin: 10px;
+    width: auto; 
+    padding: 0;
+    flex: 0 0 auto;
+    width: 0;
+    margin: 0;
 }
 
 .nav-title {
@@ -592,6 +588,22 @@ a:hover {
     cursor: pointer;
 }
 
+.sort-btn:hover { 
+    background-color: #ffd84d; /* lighter yellow */ 
+    transform: translateY(-2px); 
+} 
+
+.sort-btn:active { 
+    background-color: #e6b800; /* deeper yellow */ 
+    transform: translateY(0); 
+} 
+
+.sort-btn.active-sort { 
+    background-color: #ffcc31; 
+    color: white; 
+    font-weight: 600; 
+}
+
 
 /* Sidebar nav */
 
@@ -690,7 +702,7 @@ a:hover {
 .fun-container{
         display: flex;
         justify-content: center;
-        background-color: var(--brand-beige);
+        background-color: white;
         padding: 40px 20px;
         font-size: medium;
         color: var(--brand-gray);
@@ -699,7 +711,7 @@ a:hover {
  .contact-container{
         display: flex;
         justify-content: center;
-        background-color: var(--brand-beige);
+        background-color: white;
         padding: 40px 20px;
         font-size: medium;
         color: var(--brand-gray);
@@ -714,4 +726,63 @@ a:hover {
      border: 2px solid var(--brand-gray);
 
  }
+
+ .contact-card,
+ .fun-card{
+    background-color: var(--brand-beige);
+    max-width: 600px;
+    padding: 30px;
+    border: 1px solid --border-light;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.contact-title,
+.fun-title {
+    margin-bottom: 16px;
+    font-size: 2rem;
+    font-weight: bold;
+
+}
+
+.contact-text,
+.fun-text {
+    margin-bottom: 12px;
+    color: #022d6b;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.contact-footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.btn-ship {
+    background-color: var(--brand-blue);
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-ship:hover {
+    background-color: var(--brand-green-light);
+    transform: translateY(-2px);
+}
 

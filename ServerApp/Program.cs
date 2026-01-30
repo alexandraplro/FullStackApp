@@ -2,6 +2,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ServerApp.Models;
+using Microsoft.EntityFrameworkCore;
+using ServerApp.Data;
 
 namespace ServerApp
 {
@@ -10,6 +12,10 @@ namespace ServerApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseInMemoryDatabase("ApplicationDbContext"));
+
 
             // Enable CORS for the Blazor client
             builder.Services.AddCors(options =>

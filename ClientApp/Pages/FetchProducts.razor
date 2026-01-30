@@ -68,8 +68,11 @@ else
                     <div class="product-category">@product.Category.Name</div>
                     <div class="product-price">$@product.Price</div>
                 </div>
-            </div>
 
+            <button class="btn-ship" @onclick="@(() => ShipProduct(product))">
+                Ship
+            </button>
+            </div>
         }
     </div>
 }

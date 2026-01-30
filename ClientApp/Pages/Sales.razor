@@ -1,0 +1,89 @@
+﻿@page "/fun"
+@layout MainLayout;
+
+<h2 class="page-title">Fun Counter</h2>
+
+<div class="fun-container">
+    <div class="fun-card">
+        <h1 class="fun-title">Click the Button for a Fun Fact</h1>
+
+        <p class="fun-text">
+            You’ve clicked the button <strong>@currentCount</strong> times.
+        </p>
+
+        <button class="btn btn-primary" @onclick="IncrementCount">
+            Click to Increase
+        </button>
+
+        <p class="fun-fact">
+            @currentFunFact
+        </p>
+
+        <p class="fun-note">
+            A simple interactive demo showing how Blazor updates the UI instantly.
+        </p>
+    </div>
+</div>
+
+@code {
+    private int currentCount = 0;
+    private string currentFunFact = string.Empty;
+
+    private readonly string[] funFacts = new[]
+    {
+        "The Firefox logo isn’t a fox — it’s actually a red panda.",
+        "Nintendo began as a playing card company in 1889.",
+        "As of 2017, about 2.1 million people still used dial‑up internet.",
+        "Around 3.5 billion Google searches are made every day.",
+        "Google’s first tweet was written in binary.",
+        "Motorola made the first handheld mobile phone in 1973.",
+        "Apple once patented a flip phone shaped like the Apple logo.",
+        "Nokia used to manufacture toilet paper and tires.",
+        "More people have mobile phones than toilets worldwide.",
+        "Android held about 87% of the smartphone OS market in 2019.",
+        "Over 90% of the world’s currency exists only in digital form.",
+        "Every iPhone ad shows the time 9:41 — the moment the first iPhone was revealed.",
+        "The QWERTY keyboard layout was designed to slow typists down.",
+        "Computer users blink about 7 times per minute — far less than normal.",
+        "The first TV broadcast happened in 1925.",
+        "About 35% of all websites run on WordPress.",
+        "Roughly 350,000 tweets are sent every minute.",
+        "The name 'Google' came from a misspelling of 'Googol'.",
+        "Over 500 hours of video are uploaded to YouTube every minute.",
+        "Google sometimes rents goats to mow their lawns.",
+        "The first photograph took about 8 hours to expose.",
+        "Only 1 in 12.5 million spam emails gets a reply.",
+        "A woman in Georgia once accidentally cut off Armenia’s internet.",
+        "Your brain experiences the world with an 80‑millisecond delay.",
+        "Mark Zuckerberg is red‑green colorblind — blue is easiest for him to see.",
+        "Facebook pays at least $500 for reported security bugs.",
+        "Samsung began as a grocery store in 1938.",
+        "Spam email is named after the canned meat from a Monty Python sketch.",
+        "YouTube was originally created as a video dating site.",
+        "There are over 2.7 billion gamers worldwide.",
+        "The first computer virus was created in 1986.",
+        "The first computer mouse was invented in 1964 by Douglas Engelbart.",
+        "Ada Lovelace is considered the world’s first computer programmer.",
+        "The Colossus (1943) was the world’s first electronic computer.",
+        "The first webcam monitored a coffee pot at Cambridge University.",
+        "The first email was sent in 1971 by Ray Tomlinson.",
+        "The first computer game, Spacewar!, was created in 1962.",
+        "The ENIAC computer weighed 30 tons and filled an entire room.",
+        "ARPANET, created in the late 1960s, was the first computer network.",
+        "Over 306 billion emails were sent daily in 2020.",
+        "There were over 1.5 billion websites online in 2020.",
+        "The first video game, Tennis for Two, was created in 1958.",
+        "In 2019, the average person spent over 6 hours per day on digital media.",
+        "The first website was created in 1991 by Tim Berners‑Lee.",
+        "In 1947, Grace Hopper found a real moth inside a computer — the first literal ‘bug’ ever recorded."
+    };
+
+    private void IncrementCount()
+    {
+        currentCount++;
+
+        var rnd = new Random();
+        currentFunFact = funFacts[rnd.Next(funFacts.Length)];
+    }
+}
+
