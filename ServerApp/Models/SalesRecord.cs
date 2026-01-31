@@ -19,5 +19,8 @@ namespace ServerApp.Models
         public string ShipmentType { get; set; } = string.Empty;
         [Required]
         public decimal Total { get; set; } = 0m;
+
+        // Navigation property 
+        public Product? Product { get; set; }
     }
 }

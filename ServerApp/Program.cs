@@ -1,9 +1,8 @@
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using ServerApp.Models;
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Data;
+using ServerApp.Models;
 
 namespace ServerApp
 {
@@ -13,11 +12,11 @@ namespace ServerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register EF Core with InMemory provider
+            // Register EF Core with SQLite
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite("Data Source=inventory.db"));
 
-            // Register controllers (REQUIRED for EF migrations + your API controllers)
+            // Register controllers
             builder.Services.AddControllers();
 
             // Enable CORS for the Blazor client
@@ -42,27 +41,20 @@ namespace ServerApp
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            // Map controllers (REQUIRED)
+            // Map controllers
             app.MapControllers();
 
-            // Minimal API endpoints (optional)
-            var products = SeedData.GetProducts();
-
-            app.MapGet("/api/products", () => Results.Ok(products));
-
-            app.MapGet("/api/products/sorted", (string sortBy) =>
+            // Seed database with products if empty
+            using (var scope = app.Services.CreateScope())
             {
-                IEnumerable<Product> sorted = sortBy.ToLower() switch
-                {
-                    "price" => products.OrderBy(p => p.Price),
-                    "name" => products.OrderBy(p => p.Name),
-                    "stock" => products.OrderByDescending(p => p.Stock),
-                    "date" => products.OrderByDescending(p => p.DateAdded),
-                    _ => products
-                };
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                return Results.Ok(sorted);
-            });
+                if (!db.Products.Any())
+                {
+                    db.Products.AddRange(SeedData.GetProducts());
+                    db.SaveChanges();
+                }
+            }
 
             app.Run();
         }
