@@ -128,7 +128,7 @@
 
 <div class="year-selector mb-3">
     <label>Select Year:</label>
-    <select @bind="selectedYear" @onchange="ApplyYearFilter">
+    <select @bind="selectedYear">
         @foreach (var y in availableYears)
         {
             <option value="@y">@y</option>
@@ -325,9 +325,7 @@ else
         SortSales();
         ComputeTotals();
         ComputeMonthlyStats();
-        await RenderCharts();
-
-
+        _ = RenderCharts();
     }
 
     void ClearFilters()
@@ -342,7 +340,7 @@ else
         SortSales();
         ComputeTotals();
         ComputeMonthlyStats();
-        await RenderCharts();
+        _ = RenderCharts();
     }
 
     private bool showNewSaleModal = false;
@@ -455,9 +453,6 @@ else
 
     void ApplyYearFilter(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int year))
-            selectedYear = year;
-
         FilterByYear();
     }
 

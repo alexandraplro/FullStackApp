@@ -1,0 +1,44 @@
+/* --------------------------------------------------
+   LAYOUT CONTAINER
+-------------------------------------------------- */
+
+.page[b-pyy6cvobq3] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-pyy6cvobq3] {
+    flex: 1;
+}
+
+/* Sidebar stays sticky and vertical on desktop */
+@media (min-width: 641px) {
+    .page[b-pyy6cvobq3] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-pyy6cvobq3] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    article[b-pyy6cvobq3] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+/* --------------------------------------------------
+   REMOVE OLD BLAZOR NAVBAR RULES
+-------------------------------------------------- */
+
+/* These were breaking your custom navbar */
+.top-row[b-pyy6cvobq3],
+.top-row[b-pyy6cvobq3]  a,
+.top-row[b-pyy6cvobq3]  .btn-link,
+.top-row.auth[b-pyy6cvobq3]  a:first-child {
+    all: unset;
+}
