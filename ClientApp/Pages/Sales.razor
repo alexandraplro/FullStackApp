@@ -1,14 +1,168 @@
-﻿@page "/sales"
+@page "/sales"
 @inject HttpClient Http
-@layout MainLayout;
-@using System;
-
+@layout MainLayout
 
 <h2>Sales Ledger</h2>
+
+<div>
+    <button class="btn btn-primary mb-3" @onclick="ShowNewSaleModal">
+        + New Sale
+    </button>
+</div>
+
+<div class="sort-controls">
+    <span>Sort by:</span>
+
+    <button class="sort-btn" @onclick='() => ApplySort("date")'>
+        Date @SortIcon("date")
+    </button>
+
+    <button class="sort-btn" @onclick='() => ApplySort("product")'>
+        Product @SortIcon("product")
+    </button>
+
+    <button class="sort-btn" @onclick='() => ApplySort("total")'>
+        Total @SortIcon("total")
+    </button>
+</div>
+
+@if (sales != null && sales.Any())
+{
+    <div class="charts-container mb-4">
+
+        <div class="chart-box">
+            <h4>Monthly Revenue</h4>
+            <canvas id="revenueChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <h4>Monthly Units Sold</h4>
+            <canvas id="unitsChart"></canvas>
+        </div>
+
+    </div>
+}
+
+<div class="filter-panel">
+    <label>From:</label>
+    <input type="date" @bind="filterFrom" />
+
+    <label>To:</label>
+    <input type="date" @bind="filterTo" />
+
+    <label>Product:</label>
+    <select @bind="filterProductId">
+        <option value="">All</option>
+        @foreach (var p in productList)
+        {
+            <option value="@p.Id">@p.Name</option>
+        }
+    </select>
+
+    <label>Shipment:</label>
+    <select @bind="filterShipment">
+        <option value="">All</option>
+        <option>Ground</option>
+        <option>Air</option>
+        <option>Sea</option>
+    </select>
+
+    <button class="btn btn-secondary" @onclick="ApplyFilters">Apply</button>
+    <button class="btn btn-light" @onclick="ClearFilters">Clear</button>
+</div>
+
+@if (showNewSaleModal)
+{
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="modal fade show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Record New Sale</h5>
+                    <button type="button" class="btn-close" @onclick="CloseNewSaleModal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Product</label>
+                        <select class="form-select" @bind="newSale.ProductId">
+                            <option value="">Select product</option>
+                            @foreach (var p in productList)
+                            {
+                                <option value="@p.Id">@p.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control" @bind="newSale.Quantity" min="1" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Tax Location</label>
+                        <input type="text" class="form-control" @bind="newSale.TaxLocation" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Shipment Type</label>
+                        <select class="form-select" @bind="newSale.ShipmentType">
+                            <option>Ground</option>
+                            <option>Air</option>
+                            <option>Sea</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseNewSaleModal">Cancel</button>
+                    <button class="btn btn-primary" @onclick="SubmitNewSale">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<div class="year-selector mb-3">
+    <label>Select Year:</label>
+    <select @bind="selectedYear" @onchange="ApplyYearFilter">
+        @foreach (var y in availableYears)
+        {
+            <option value="@y">@y</option>
+        }
+    </select>
+</div>
+
+
+@if (sales != null && sales.Any())
+{
+    <div class="revenue-summary mb-3">
+        <div class="summary-item">
+            <strong>Total Revenue:</strong> @totalRevenue.ToString("C")
+        </div>
+        <div class="summary-item">
+            <strong>Total Units Sold:</strong> @totalUnits
+        </div>
+        <div class="summary-item">
+            <strong>Average Sale:</strong> @averageSale.ToString("C")
+        </div>
+        <div class="summary-item">
+            <strong>Number of Sales:</strong> @sales.Count
+        </div>
+    </div>
+}
+
 
 @if (sales == null)
 {
     <p>Loading...</p>
+}
+else if (!sales.Any())
+{
+    <p>No sales recorded yet.</p>
 }
 else
 {
@@ -32,7 +186,7 @@ else
                     <td>@s.Quantity</td>
                     <td>@s.TaxLocation</td>
                     <td>@s.ShipmentType</td>
-                    <td>@s.Total</td>
+                    <td>@s.Total.ToString("C")</td>
                 </tr>
             }
         </tbody>
@@ -40,14 +194,283 @@ else
 }
 
 @code {
-    private List<SalesRecord>? sales;
+    private List<SalesRecordDto>? sales;
+    private List<SalesRecordDto> allSales = new();
+    private List<ProductDto> productList = new();
+
+    private string currentSort = "date";
+    private bool sortAscending = true;
+
+    private DateTime? filterFrom;
+    private DateTime? filterTo;
+    private string? filterProductId;
+    private string? filterShipment;
+
+    private decimal totalRevenue = 0;
+    private int totalUnits = 0;
+    private decimal averageSale = 0;
+
+    private int selectedYear = DateTime.Now.Year;
+    private List<int> availableYears = new();
 
     protected override async Task OnInitializedAsync()
     {
-        sales = await Http.GetFromJsonAsync<List<SalesRecord>>("api/sales");
+        await LoadProducts();
+
+        allSales = await Http.GetFromJsonAsync<List<SalesRecordDto>>("api/sales");
+        sales = allSales;
+
+        availableYears = allSales
+            .Select(s => s.Date.Year)
+            .Distinct()
+            .OrderByDescending(y => y)
+            .ToList();
+
+        selectedYear = availableYears.FirstOrDefault();
+
+        SortSales();
+        ComputeTotals();
+        ComputeMonthlyStats(); 
+        await RenderCharts();
+
+        FilterByYear();
+
     }
+
+    async Task LoadProducts()
+    {
+        productList = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+    }
+
+    // DTOs
+    public class SalesRecordDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int Quantity { get; set; }
+        public decimal Total { get; set; }
+        public string ShipmentType { get; set; } = string.Empty;
+        public string TaxLocation { get; set; } = string.Empty;
+        public ProductDto Product { get; set; } = new ProductDto();
+    }
+
+    public class ProductDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    // Sorting
+    void ApplySort(string field)
+    {
+        if (currentSort == field)
+            sortAscending = !sortAscending;
+        else
+        {
+            currentSort = field;
+            sortAscending = true;
+        }
+
+        SortSales();
+    }
+
+    void SortSales()
+    {
+        if (sales == null) return;
+
+        sales = currentSort switch
+        {
+            "product" => sortAscending
+                ? sales.OrderBy(s => s.Product?.Name).ToList()
+                : sales.OrderByDescending(s => s.Product?.Name).ToList(),
+
+            "total" => sortAscending
+                ? sales.OrderBy(s => s.Total).ToList()
+                : sales.OrderByDescending(s => s.Total).ToList(),
+
+            _ => sortAscending
+                ? sales.OrderBy(s => s.Date).ToList()
+                : sales.OrderByDescending(s => s.Date).ToList(),
+        };
+        ComputeTotals();
+        ComputeMonthlyStats();
+        _ = RenderCharts();
+    }
+
+    string SortIcon(string field)
+    {
+        if (currentSort != field)
+            return "";
+
+        return sortAscending ? "↑" : "↓";
+    }
+
+    // Filtering
+    void ApplyFilters()
+    {
+        sales = allSales;
+
+        if (filterFrom.HasValue)
+            sales = sales.Where(s => s.Date >= filterFrom.Value).ToList();
+
+        if (filterTo.HasValue)
+            sales = sales.Where(s => s.Date <= filterTo.Value).ToList();
+
+        if (!string.IsNullOrEmpty(filterProductId))
+            sales = sales.Where(s => s.Product.Id.ToString() == filterProductId).ToList();
+
+        if (!string.IsNullOrEmpty(filterShipment))
+            sales = sales.Where(s => s.ShipmentType == filterShipment).ToList();
+
+        SortSales();
+        ComputeTotals();
+        ComputeMonthlyStats();
+        await RenderCharts();
+
+
+    }
+
+    void ClearFilters()
+    {
+        filterFrom = null;
+        filterTo = null;
+        filterProductId = null;
+        filterShipment = null;
+
+        sales = allSales;
+        
+        SortSales();
+        ComputeTotals();
+        ComputeMonthlyStats();
+        await RenderCharts();
+    }
+
+    private bool showNewSaleModal = false;
+
+    private NewSaleDto newSale = new();
+
+    void ShowNewSaleModal()
+    {
+        newSale = new NewSaleDto
+        {
+            Date = DateTime.Now,
+            ShipmentType = "Ground",
+            TaxLocation = ""
+        };
+
+        showNewSaleModal = true;
+    }
+
+    void CloseNewSaleModal()
+    {
+        showNewSaleModal = false;
+    }
+
+    public class NewSaleDto
+    {
+        public DateTime Date { get; set; } = DateTime.Now;
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public string TaxLocation { get; set; } = string.Empty;
+        public string ShipmentType { get; set; } = "Ground";
+    }
+
+    async Task SubmitNewSale()
+    {
+        if (newSale.ProductId == 0 || newSale.Quantity <= 0)
+            return; // You can add validation UI later
+
+        var response = await Http.PostAsJsonAsync("api/sales", newSale);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Refresh ledger
+            allSales = await Http.GetFromJsonAsync<List<SalesRecordDto>>("api/sales");
+            sales = allSales;
+            SortSales();
+        
+            ComputeTotals();
+            ComputeMonthlyStats();
+            await RenderCharts();
+
+
+            CloseNewSaleModal();
+        }
+        else
+        {
+            // Optional: show error message
+            Console.WriteLine("Failed to save sale");
+        }
+    }
+
+    void ComputeTotals()
+    {
+        if (sales == null || !sales.Any())
+        {
+            totalRevenue = 0;
+            totalUnits = 0;
+            averageSale = 0;
+            return;
+        }
+
+        totalRevenue = sales.Sum(s => s.Total);
+        totalUnits = sales.Sum(s => s.Quantity);
+        averageSale = sales.Average(s => s.Total);
+    }
+
+    [Inject] IJSRuntime JS { get; set; }
+
+    private Dictionary<string, decimal> monthlyRevenue = new();
+    private Dictionary<string, int> monthlyUnits = new();
+
+    void ComputeMonthlyStats()
+    {
+        monthlyRevenue.Clear();
+        monthlyUnits.Clear();
+
+        foreach (var s in sales)
+        {
+            string key = s.Date.ToString("yyyy-MM");
+
+            if (!monthlyRevenue.ContainsKey(key))
+            {
+                monthlyRevenue[key] = 0;
+                monthlyUnits[key] = 0;
+            }
+            monthlyRevenue[key] += s.Total;
+            monthlyUnits[key] += s.Quantity;
+        }
+    }
+
+    async Task RenderCharts()
+    {
+        var labels = monthlyRevenue.Keys.OrderBy(k => k).ToList();
+
+        var revenueData = labels.Select(l => monthlyRevenue[l]).ToList();
+        var unitsData = labels.Select(l => monthlyUnits[l]).ToList();
+
+        await JS.InvokeVoidAsync("salesCharts.renderRevenueChart", labels, revenueData);
+        await JS.InvokeVoidAsync("salesCharts.renderUnitsChart", labels, unitsData);
+    }
+
+    void ApplyYearFilter(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int year))
+            selectedYear = year;
+
+        FilterByYear();
+    }
+
+    void FilterByYear()
+    {
+        sales = allSales
+            .Where(s => s.Date.Year == selectedYear)
+            .ToList();
+
+        SortSales();
+        ComputeTotals();
+        ComputeMonthlyStats();
+        _ = RenderCharts();
+    }
+
 }
-
-
-
-
