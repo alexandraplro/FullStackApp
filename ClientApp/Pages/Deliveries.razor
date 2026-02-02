@@ -1,0 +1,285 @@
+@page "/deliveries"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<h3 class="page-title">Deliveries</h3>
+
+<div class="filters-container">
+    <div class="filter-group">
+        <label>Product</label>
+        <select @bind="filterProductId">
+            <option value="">All</option>
+            @foreach (var p in products)
+            {
+                <option value="@p.Id">@p.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Supplier</label>
+        <input type="text" @bind="filterSupplier" placeholder="Supplier name" />
+    </div>
+
+    <div class="filter-group">
+        <label>From</label>
+        <input type="date" @bind="filterFrom" />
+    </div>
+
+    <div class="filter-group">
+        <label>To</label>
+        <input type="date" @bind="filterTo" />
+    </div>
+
+    <button class="btn btn-secondary" @onclick="ClearFilters">Clear</button>
+    <button class="btn btn-primary" @onclick="ShowNewDeliveryModal">New Delivery</button>
+</div>
+
+<div class="summary-bar">
+    <div>Total Deliveries: <strong>@deliveries.Count</strong></div>
+    <div>Total Units Received: <strong>@totalUnits</strong></div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th @onclick="() => ApplySort("date")">Date</th>
+            <th @onclick="() => ApplySort("product")">Product</th>
+            <th @onclick="() => ApplySort("quantity")">Quantity</th>
+            <th @onclick="() => ApplySort("supplier")">Supplier</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in deliveries)
+        {
+            <tr>
+                <td>@d.Date.ToShortDateString()</td>
+                <td>@d.Product?.Name</td>
+                <td>@d.Quantity</td>
+                <td>@d.Supplier</td>
+                <td>@d.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<canvas id="deliveriesChart" width="400" height="200"></canvas>
+
+@if (showNewDeliveryModal)
+{
+    <div class="modal-backdrop">
+        <div class="modal-container">
+            <h4>New Delivery</h4>
+
+            <div class="modal-field">
+                <label>Date</label>
+                <input type="date" @bind="newDelivery.Date" />
+            </div>
+
+            <div class="modal-field">
+                <label>Product</label>
+                <select @bind="newDelivery.ProductId">
+                    <option value="">Select product</option>
+                    @foreach (var p in products)
+                    {
+                        <option value="@p.Id">@p.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label>Quantity</label>
+                <input type="number" @bind="newDelivery.Quantity" />
+            </div>
+
+            <div class="modal-field">
+                <label>Supplier</label>
+                <input type="text" @bind="newDelivery.Supplier" />
+            </div>
+
+            <div class="modal-field">
+                <label>Notes</label>
+                <textarea @bind="newDelivery.Notes"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" @onclick="CloseNewDeliveryModal">Cancel</button>
+                <button class="btn btn-primary" @onclick="SubmitNewDelivery">Save</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<DeliveryDto> deliveries = new();
+    private List<ProductDto> products = new();
+
+    private string? filterProductId;
+    private string? filterSupplier;
+    private DateTime? filterFrom;
+    private DateTime? filterTo;
+
+    private string currentSort = "date";
+    private bool sortAscending = false;
+
+    private int totalUnits = 0;
+
+    private bool showNewDeliveryModal = false;
+
+    private DeliveryDto newDelivery = new()
+    {
+        Date = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+        await LoadDeliveries();
+    }
+
+    private async Task LoadDeliveries()
+    {
+        var data = await Http.GetFromJsonAsync<List<DeliveryDto>>("api/deliveries");
+        deliveries = data ?? new();
+        ApplyFilters();
+        ComputeTotals();
+        await RenderCharts();
+    }
+
+    private void ApplyFilters()
+    {
+        var query = deliveries.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(filterProductId) &&
+            int.TryParse(filterProductId, out int pid))
+        {
+            query = query.Where(d => d.ProductId == pid);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filterSupplier))
+        {
+            query = query.Where(d => d.Supplier.Contains(filterSupplier, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (filterFrom.HasValue)
+        {
+            query = query.Where(d => d.Date >= filterFrom.Value);
+        }
+
+        if (filterTo.HasValue)
+        {
+            query = query.Where(d => d.Date <= filterTo.Value);
+        }
+
+        deliveries = query.ToList();
+        SortDeliveries();
+        ComputeTotals();
+        _ = RenderCharts();
+    }
+
+    private void ClearFilters()
+    {
+        filterProductId = null;
+        filterSupplier = null;
+        filterFrom = null;
+        filterTo = null;
+
+        _ = LoadDeliveries();
+    }
+
+    private void ApplySort(string field)
+    {
+        if (currentSort == field)
+            sortAscending = !sortAscending;
+        else
+        {
+            currentSort = field;
+            sortAscending = true;
+        }
+
+        SortDeliveries();
+        _ = RenderCharts();
+    }
+
+    private void SortDeliveries()
+    {
+        deliveries = currentSort switch
+        {
+            "product" => sortAscending
+                ? deliveries.OrderBy(d => d.Product?.Name).ToList()
+                : deliveries.OrderByDescending(d => d.Product?.Name).ToList(),
+
+            "quantity" => sortAscending
+                ? deliveries.OrderBy(d => d.Quantity).ToList()
+                : deliveries.OrderByDescending(d => d.Quantity).ToList(),
+
+            "supplier" => sortAscending
+                ? deliveries.OrderBy(d => d.Supplier).ToList()
+                : deliveries.OrderByDescending(d => d.Supplier).ToList(),
+
+            _ => sortAscending
+                ? deliveries.OrderBy(d => d.Date).ToList()
+                : deliveries.OrderByDescending(d => d.Date).ToList(),
+        };
+    }
+
+    private void ComputeTotals()
+    {
+        totalUnits = deliveries.Sum(d => d.Quantity);
+    }
+
+    private async Task RenderCharts()
+    {
+        var monthly = deliveries
+            .GroupBy(d => new { d.Date.Year, d.Date.Month })
+            .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
+            .Select(g => new
+            {
+                Label = $"{g.Key.Month}/{g.Key.Year}",
+                Total = g.Sum(d => d.Quantity)
+            })
+            .ToList();
+
+        await JS.InvokeVoidAsync("renderDeliveriesChart", monthly);
+    }
+
+    private void ShowNewDeliveryModal()
+    {
+        newDelivery = new DeliveryDto { Date = DateTime.Now };
+        showNewDeliveryModal = true;
+    }
+
+    private void CloseNewDeliveryModal()
+    {
+        showNewDeliveryModal = false;
+    }
+
+    private async Task SubmitNewDelivery()
+    {
+        var response = await Http.PostAsJsonAsync("api/deliveries", newDelivery);
+
+        if (response.IsSuccessStatusCode)
+        {
+            showNewDeliveryModal = false;
+            await LoadDeliveries();
+        }
+    }
+
+    public class DeliveryDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public ProductDto? Product { get; set; }
+        public int Quantity { get; set; }
+        public string Supplier { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
+    }
+
+    public class ProductDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+}

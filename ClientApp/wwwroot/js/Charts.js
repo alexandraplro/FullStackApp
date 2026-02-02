@@ -66,3 +66,54 @@ window.salesCharts = {
         });
     }
 };
+
+window.renderDeliveriesChart = function (data) {
+    const ctx = document.getElementById('deliveriesChart');
+
+    if (window.deliveriesChartInstance) {
+        window.deliveriesChartInstance.destroy();
+    }
+
+    window.deliveriesChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.map(x => x.label),
+            datasets: [{
+                label: 'Units Received',
+                data: data.map(x => x.total),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+            }]
+        }
+    });
+};
+
+window.renderStockMovementChart = function (sales, deliveries) {
+    const ctx = document.getElementById('stockMovementChart');
+
+    if (window.stockMovementChartInstance) {
+        window.stockMovementChartInstance.destroy();
+    }
+
+    const labels = [...new Set([...sales.map(s => s.label), ...deliveries.map(d => d.label)])];
+
+    window.stockMovementChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Units Sold',
+                    data: labels.map(l => sales.find(s => s.label === l)?.total || 0),
+                    borderColor: 'rgba(255, 99, 132, 0.8)',
+                    fill: false
+                },
+                {
+                    label: 'Units Delivered',
+                    data: labels.map(l => deliveries.find(d => d.label === l)?.total || 0),
+                    borderColor: 'rgba(75, 192, 192, 0.8)',
+                    fill: false
+                }
+            ]
+        }
+    });
+};

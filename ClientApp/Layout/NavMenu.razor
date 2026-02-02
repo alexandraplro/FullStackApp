@@ -1,5 +1,7 @@
 ﻿<nav class="side-nav">
     <ul>
+
+        <!-- Home -->
         <li>
             <NavLink href="/" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill"></span>
@@ -7,6 +9,7 @@
             </NavLink>
         </li>
 
+        <!-- Products -->
         <li>
             <NavLink href="/fetchproducts">
                 <span class="bi bi-bag-fill"></span>
@@ -14,18 +17,45 @@
             </NavLink>
         </li>
 
+        <!-- Deliveries -->
+        <li>
+            <NavLink href="/deliveries">
+                <span class="bi bi-truck"></span>
+                Deliveries
+            </NavLink>
+        </li>
+
+        <!-- Sales Ledger -->
         <li>
             <NavLink href="/sales">
-                <span class="oi oi-list-rich"></span>
+                <span class="bi bi-list-ul"></span>
                 Sales Ledger
             </NavLink>
         </li>
 
+        <!-- Dashboard -->
+        <li>
+            <NavLink href="/dashboard">
+                <span class="bi bi-speedometer2"></span>
+                Dashboard
+            </NavLink>
+        </li>
+
+        <!-- Order History -->
+        <li>
+            <NavLink href="/orders">
+                <span class="bi bi-clock-history"></span>
+                Order History
+            </NavLink>
+        </li>
+
+        <!-- Contact -->
         <li>
             <NavLink href="/contact">
                 <span class="bi bi-person-lines-fill"></span>
                 Contact
             </NavLink>
         </li>
+
     </ul>
 </nav>

@@ -36,12 +36,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaGJvYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Deliveries.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGVsaXZlcmllcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/FetchProducts.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRmV0Y2hQcm9kdWN0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/OrderHistory.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvT3JkZXJIaXN0b3J5LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Sales.razor]

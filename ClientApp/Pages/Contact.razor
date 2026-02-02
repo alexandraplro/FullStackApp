@@ -1,30 +1,113 @@
 ﻿@page "/contact"
-@layout MainLayout;
+@layout MainLayout
 
-<h2 class="page-title">Contact Information</h2>
+<h2 class="page-title">Contact Us</h2>
 
 <div class="contact-container">
+
     <div class="contact-card">
-        <h1 class="contact-title">Contact Information</h1>
 
-        <p class="contact-text">
-            Name: <strong>Alexandra Plazas Rocha</strong>
-        </p>
+        <h3>Send Us a Message</h3>
 
-        <p class="contact-text">
-            GitHub: 
-            <a href="https://github.com/alexandraplro" target="_blank">
-                github.com/alexandraplro
-            </a>
-        </p>
+        <div class="contact-field">
+            <label>Name</label>
+            <input type="text" @bind="form.Name" />
+            @if (!string.IsNullOrEmpty(nameError))
+            {
+                <p class="error-text">@nameError</p>
+            }
+        </div>
 
-        <p class="contact-text">
-            Thank you for exploring this inventory application. Feel free to reach out or
-            explore the project code on GitHub.
-        </p>
+        <div class="contact-field">
+            <label>Email</label>
+            <input type="email" @bind="form.Email" />
+            @if (!string.IsNullOrEmpty(emailError))
+            {
+                <p class="error-text">@emailError</p>
+            }
+        </div>
 
-        <footer class="contact-footer">
-            © 2026 Alexandra Plazas Rocha
-        </footer>
+        <div class="contact-field">
+            <label>Phone</label>
+            <input type="text" @bind="form.Phone" />
+            @if (!string.IsNullOrEmpty(phoneError))
+            {
+                <p class="error-text">@phoneError</p>
+            }
+        </div>
+
+        <div class="contact-field">
+            <label>Message</label>
+            <textarea @bind="form.Message"></textarea>
+        </div>
+
+        <button class="btn-primary" @onclick="SubmitForm">Send Message</button>
+
     </div>
 </div>
+
+@if (showSuccess)
+{
+    <div class="confirmation-overlay">
+        <div class="confirmation-box">
+            <div class="checkmark">✔</div>
+            <p>Your message has been sent!</p>
+        </div>
+    </div>
+}
+
+@code {
+    private ContactForm form = new();
+
+    private string? nameError;
+    private string? emailError;
+    private string? phoneError;
+
+    private bool showSuccess = false;
+
+    private bool Validate()
+    {
+        nameError = emailError = phoneError = null;
+
+        // Name
+        if (string.IsNullOrWhiteSpace(form.Name))
+            nameError = "Name is required.";
+
+        // Email
+        if (string.IsNullOrWhiteSpace(form.Email))
+            emailError = "Email is required.";
+        else if (!form.Email.Contains("@") || !form.Email.Contains("."))
+            emailError = "Please enter a valid email.";
+
+        // Phone
+        if (string.IsNullOrWhiteSpace(form.Phone))
+            phoneError = "Phone number is required.";
+        else if (form.Phone.Length < 7 || !form.Phone.Any(char.IsDigit))
+            phoneError = "Please enter a valid phone number.";
+
+        return nameError == null && emailError == null && phoneError == null;
+    }
+
+    private async Task SubmitForm()
+    {
+        if (!Validate())
+            return;
+
+        // Simulate sending message
+        await Task.Delay(500);
+
+        showSuccess = true;
+        await Task.Delay(1500);
+        showSuccess = false;
+
+        form = new ContactForm();
+    }
+
+    public class ContactForm
+    {
+        public string Name { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string Phone { get; set; } = "";
+        public string Message { get; set; } = "";
+    }
+}

@@ -14,6 +14,8 @@ namespace ServerApp.Data
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<SalesRecord> SaleRecords { get; set; }
         public DbSet<LossRecord> LossRecords { get; set; }
-        public DbSet<DeliveryRecord> DeliveryRecords { get; set; }
+
+        public DbSet<Delivery> Deliveries { get; set; }
+
     }
 }

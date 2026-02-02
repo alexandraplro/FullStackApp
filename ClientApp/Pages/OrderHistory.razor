@@ -1,0 +1,51 @@
+@page "/orders"
+@inject HttpClient Http
+@using ClientApp.Models
+@layout MainLayout
+
+<h2 class="page-title">Order History</h2>
+
+@if (orders == null)
+{
+    <p style="text-align:center;">Loading...</p>
+}
+else if (!orders.Any())
+{
+    <p style="text-align:center;">No orders have been placed yet.</p>
+}
+else
+{
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Shipment</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var o in orders)
+            {
+                <tr>
+                    <td>@o.Date.ToShortDateString()</td>
+                    <td>@o.Product?.Name</td>
+                    <td>@o.Quantity</td>
+                    <td>@o.ShipmentType</td>
+                    <td>$@o.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<SaleRecordDto>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await Http.GetFromJsonAsync<List<SaleRecordDto>>("api/sales");
+    }
+}

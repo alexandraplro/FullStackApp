@@ -1,120 +1,220 @@
 @page "/fetchproducts"
-@inject HttpClient Http;
-@using ClientApp.Models;
-@using System.Text.Json;
-@layout MainLayout;
+@inject HttpClient Http
+@using ClientApp.Models
+@layout MainLayout
 
-<h2 class="page-title">Product List</h2>
+<h2 class="page-title">Products</h2>
 
-<div class="sort-controls">
-
-    <span class="sort-label">Sort By:</span>
-
-    <button class="sort-btn @(ActiveSort("name"))" @onclick="@(() => ApplySort("name"))">
-        Name @SortIcon("name")
-    </button>
-
-    <button class="sort-btn @(ActiveSort("price"))" @onclick="@(() => ApplySort("price"))">
-        Price @SortIcon("price")
-    </button>
-
-    <button class="sort-btn @(ActiveSort("stock"))" @onclick="@(() => ApplySort("stock"))">
-        Stock @SortIcon("stock")
-    </button>
-
-    <button class="sort-btn @(ActiveSort("dateadded"))" @onclick="@(() => ApplySort("dateadded"))">
-        Date Added @SortIcon("dateadded")
-    </button>
-
-    <select class="sort-dropdown" @onchange="OnCategoryChanged">
-        <option value="">All Categories</option>
-        @foreach (var c in categories)
-        {
-            <option value="@c">@c</option>
-        }
-    </select>
-
-    <button class="reset-btn" @onclick="ResetSorting">
-        Reset
-    </button>
-
+<!-- HERO BANNER -->
+<div class="category-hero">
+    <div class="category-hero-title">Browse Our Eco Categories</div>
+    <div class="category-hero-subtitle">Sustainable, curated, and beautifully organized</div>
 </div>
 
-@if (products == null)
-{
-    <p style="text-align:center;">Loading...</p>
-}
-else if (products.Length == 0)
-{
-    <p style="text-align:center;">No products available.</p>
-}
-else
-{
-    <p style="text-align:center; color: #022d6b; margin-bottom: 10px;">
-        Showing @products.Length products
-    </p>
+<div class="transition-wrapper">
 
-    <div class="product-grid">
-        @foreach (var product in products)
-        {
-            <div class="product-card">
-                <img src="@product.ImageUrl"
-                    alt="@product.Name"
-                    class="product-image"
-                    onerror="this.src='/images/icons/default.png'" />
+    @if (!showingProducts)
+    {
+        <!-- CATEGORY GRID -->
+        <p class="category-header">Choose a category</p>
 
-                <div class="product-info">
-                    <div class="product-name">@product.Name</div>
-                    <div class="product-category">@product.Category.Name</div>
-                    <div class="product-price">$@product.Price</div>
+        <div class="category-grid">
+            @foreach (var c in categories)
+            {
+                <div class="category-card" title="View products" @onclick="() => LoadCategory(c)">
+                    <div class="category-icon">
+                        <img src="@GetCategoryIcon(c)" alt="@c" />
+                    </div>
+                    <div class="category-name">@c</div>
                 </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- BACK BUTTON -->
+        <button class="btn-back" @onclick="BackToCategories">← Back to Categories</button>
 
-            @* <button class="btn-ship" @onclick="@(() => ShipProduct(product))"> *@
-            @*     Ship *@
-            @* </button> *@
+        <h3 class="category-title">@selectedCategory</h3>
+
+        <!-- SORT CONTROLS -->
+        <div class="sort-controls">
+            <span class="sort-label">Sort By:</span>
+
+            <button class="sort-btn @(ActiveSort("name"))" @onclick="@(() => ApplySort("name"))">
+                Name @SortIcon("name")
+            </button>
+
+            <button class="sort-btn @(ActiveSort("price"))" @onclick="@(() => ApplySort("price"))">
+                Price @SortIcon("price")
+            </button>
+
+            <button class="sort-btn @(ActiveSort("stock"))" @onclick="@(() => ApplySort("stock"))">
+                Stock @SortIcon("stock")
+            </button>
+
+            <button class="sort-btn @(ActiveSort("dateadded"))" @onclick="@(() => ApplySort("dateadded"))">
+                Date Added @SortIcon("dateadded")
+            </button>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        @if (products == null)
+        {
+            <p style="text-align:center;">Loading...</p>
+        }
+        else if (products.Length == 0)
+        {
+            <p style="text-align:center;">No products in this category.</p>
+        }
+        else
+        {
+            <p class="product-count">Showing @products.Length products</p>
+
+            <div class="product-grid">
+                @foreach (var product in products)
+                {
+                    <div class="product-card" title="Order this product" @onclick="() => OpenOrderModal(product)">
+                        <img src="@product.ImageUrl"
+                             alt="@product.Name"
+                             class="product-image"
+                             onerror="this.src='/images/icons/default.png'" />
+
+                        <div class="product-info">
+                            <div class="product-name">@product.Name</div>
+                            <div class="product-category">@product.Category.Name</div>
+                            <div class="product-price">$@product.Price</div>
+                        </div>
+                    </div>
+                }
             </div>
         }
+    }
+</div>
+
+<!-- ORDER MODAL -->
+@if (showOrderModal)
+{
+    <div class="modal-backdrop">
+        <div class="modal-container">
+
+            <h3>Order @selectedProduct?.Name</h3>
+
+            <div class="modal-field">
+                <label>Quantity</label>
+                <input type="number" @bind="order.Quantity" min="1" @oninput="RecalculateTotals" />
+            </div>
+
+            <div class="modal-field">
+                <label>Address</label>
+                <input type="text" @bind="order.Address" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(addressError))
+            {
+                <p class="error-text">@addressError</p>
+            }
+
+            <div class="modal-field">
+                <label>Shipment Type</label>
+                <select @bind="order.ShipmentType" @onchange="RecalculateTotals">
+                    <option value="InState">In-State</option>
+                    <option value="OutOfState">Out-of-State</option>
+                    <option value="International">International</option>
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label>Notes</label>
+                <textarea @bind="order.Notes"></textarea>
+            </div>
+
+            <div class="modal-summary">
+                <p>Subtotal: $@subtotal</p>
+                <p>Tax: $@taxAmount</p>
+                <p>Shipment: $@shipmentCost</p>
+                <p><strong>Total: $@total</strong></p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" @onclick="CloseOrderModal">Cancel</button>
+                <button class="btn-primary" @onclick="SubmitOrder">Confirm Order</button>
+            </div>
+
+        </div>
+    </div>
+}
+
+<!-- ORDER CONFIRMATION ANIMATION -->
+@if (showOrderConfirmation)
+{
+    <div class="confirmation-overlay">
+        <div class="confirmation-box">
+            <div class="checkmark">✔</div>
+            <p>Order placed successfully!</p>
+        </div>
+    </div>
+}
+
+<!-- EMAIL PREVIEW -->
+@if (showEmailPreview)
+{
+    <div class="email-preview">
+        <h3>📧 Order Confirmation Email</h3>
+        <p><strong>To:</strong> customer@example.com</p>
+        <p><strong>Subject:</strong> Your Order Confirmation</p>
+
+        <div class="email-body">
+            <p>Hi there,</p>
+            <p>Thank you for your order of <strong>@selectedProduct?.Name</strong>.</p>
+            <p>Quantity: @order.Quantity</p>
+            <p>Total: $@total</p>
+            <p>We’ll notify you when your shipment is on the way.</p>
+            <p>— Eco Inventory Team 🌿</p>
+        </div>
+
+        <button class="btn-primary" @onclick="() => showEmailPreview = false">Close</button>
     </div>
 }
 
 @code {
-
-    private Product[]? products = null;   // IMPORTANT FIX
+    private Product[]? products;
     private List<string> categories = new();
+    private string selectedCategory = "";
+    private bool showingProducts = false;
+
     private string currentSort = "";
     private bool sortAscending = true;
-    private string selectedCategory = "";
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        var all = await Http.GetFromJsonAsync<Product[]>("api/products") ?? Array.Empty<Product>();
 
-            var response = await Http.GetAsync("http://localhost:5212/api/products", cts.Token);
-            response.EnsureSuccessStatusCode();
+        categories = all
+            .Select(p => p.Category?.Name ?? "")
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+    }
 
-            var json = await response.Content.ReadAsStringAsync();
+    private async Task LoadCategory(string category)
+    {
+        selectedCategory = category;
+        showingProducts = true;
 
-            products = JsonSerializer.Deserialize<Product[]>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+        products = await Http.GetFromJsonAsync<Product[]>(
+            $"api/products/filter?category={category}"
+        );
+    }
 
-            Console.WriteLine($"Loaded {products?.Length ?? 0} products.");
-
-            categories = products!
-                .Select(p => p.Category?.Name ?? "")
-                .Where(c => !string.IsNullOrWhiteSpace(c))
-                .Distinct()
-                .OrderBy(c => c)
-                .ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error loading products: {ex.Message}");
-            products = Array.Empty<Product>();
-        }
+    private void BackToCategories()
+    {
+        showingProducts = false;
+        selectedCategory = "";
+        products = null;
+        currentSort = "";
+        sortAscending = true;
     }
 
     private async Task ApplySort(string field)
@@ -130,7 +230,7 @@ else
         var direction = sortAscending ? "asc" : "desc";
 
         products = await Http.GetFromJsonAsync<Product[]>(
-            $"api/products/sorted?sortBy={field}&direction={direction}"
+            $"api/products/sorted?sortBy={field}&direction={direction}&category={selectedCategory}"
         );
     }
 
@@ -147,27 +247,135 @@ else
             : new MarkupString("↓");
     }
 
-    private async Task OnCategoryChanged(ChangeEventArgs e)
+    private string GetCategoryIcon(string category)
     {
-        selectedCategory = e.Value?.ToString() ?? "";
-
-        if (string.IsNullOrWhiteSpace(selectedCategory))
-        {
-            products = await Http.GetFromJsonAsync<Product[]>("api/products");
-        }
-        else
-        {
-            products = await Http.GetFromJsonAsync<Product[]>(
-                $"api/products/filter?category={selectedCategory}"
-            );
-        }
+        var fileName = category.ToLower().Replace(" ", "") + ".png";
+        return $"/images/icons/{fileName}";
     }
 
-    private async Task ResetSorting()
+    private bool showOrderModal = false;
+    private bool showOrderConfirmation = false;
+    private bool showEmailPreview = false;
+
+    private Product? selectedProduct;
+
+    private OrderModel order = new();
+
+    private decimal subtotal;
+    private decimal taxAmount;
+    private decimal shipmentCost;
+    private decimal total;
+
+    private void OpenOrderModal(Product product)
     {
-        currentSort = "";
-        sortAscending = true;
-        selectedCategory = "";
-        products = await Http.GetFromJsonAsync<Product[]>("api/products");
+        selectedProduct = product;
+        order = new OrderModel
+        {
+            ProductId = product.Id,
+            Quantity = 1,
+            ShipmentType = "InState",
+            Address = "",
+            Notes = ""
+        };
+
+        RecalculateTotals();
+        showOrderModal = true;
+    }
+
+    private void CloseOrderModal()
+    {
+        showOrderModal = false;
+    }
+
+    private void RecalculateTotals()
+    {
+        if (selectedProduct == null) return;
+
+        subtotal = selectedProduct.Price * order.Quantity;
+
+        decimal taxRate = 0.04m;
+        decimal federalTax = 0.06m;
+        decimal internationalTariff = 0.08m;
+
+        taxAmount = subtotal * taxRate;
+
+        if (order.ShipmentType == "International")
+            taxAmount += subtotal * internationalTariff;
+
+        taxAmount += subtotal * federalTax;
+
+        shipmentCost = order.ShipmentType switch
+        {
+            "InState" => order.Quantity * 1.00m,
+            "OutOfState" => order.Quantity * 1.20m,
+            "International" => order.Quantity * 2.00m,
+            _ => 0
+        };
+
+        total = subtotal + taxAmount + shipmentCost;
+    }
+
+    private async Task SubmitOrder()
+    {
+        if (!ValidateAddress())
+            return;
+
+        var sale = new
+        {
+            Date = DateTime.Now,
+            ProductId = selectedProduct!.Id,
+            Quantity = order.Quantity,
+            ShipmentType = order.ShipmentType,
+            TaxLocation = "DE",
+            Total = total.ToString("0.00")
+        };
+
+        await Http.PostAsJsonAsync("api/sales", sale);
+
+        showOrderModal = false;
+
+        showOrderConfirmation = true;
+        await Task.Delay(1500);
+        showOrderConfirmation = false;
+
+        showEmailPreview = true;
+
+        await LoadCategory(selectedCategory);
+    }
+
+    public class OrderModel
+    {
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public string ShipmentType { get; set; } = "InState";
+        public string Address { get; set; } = "";
+        public string Notes { get; set; } = "";
+    }
+
+    private string? addressError;
+
+    private bool ValidateAddress()
+    {
+        addressError = null;
+
+        if (string.IsNullOrWhiteSpace(order.Address))
+        {
+            addressError = "Address cannot be empty.";
+            return false;
+        }
+
+        if (order.Address.Length < 6)
+        {
+            addressError = "Address is too short.";
+            return false;
+        }
+
+        if (!order.Address.Any(char.IsDigit) || !order.Address.Any(char.IsLetter))
+        {
+            addressError = "Address must contain both letters and numbers.";
+            return false;
+        }
+
+        return true;
     }
 }

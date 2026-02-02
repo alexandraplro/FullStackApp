@@ -1,0 +1,171 @@
+@page "/dashboard"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<h2 class="page-title">Dashboard</h2>
+
+<div class="dashboard-grid">
+
+    <!-- Summary Cards -->
+    <div class="summary-card">
+        <h4>Total Products</h4>
+        <p>@totalProducts</p>
+    </div>
+
+    <div class="summary-card">
+        <h4>Total Stock Units</h4>
+        <p>@totalUnits</p>
+    </div>
+
+    <div class="summary-card">
+        <h4>Low Stock Items</h4>
+        <p>@lowStockCount</p>
+    </div>
+
+    <div class="summary-card">
+        <h4>Out of Stock</h4>
+        <p>@outOfStockCount</p>
+    </div>
+
+</div>
+
+<!-- Combined Chart -->
+<div class="chart-container">
+    <canvas id="stockMovementChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Low Stock List -->
+<div class="panel">
+    <h3>Low Stock Alerts</h3>
+    @if (lowStock.Any())
+    {
+        <ul>
+            @foreach (var p in lowStock)
+            {
+                <li>@p.Name — @p.Stock units left</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>All products are sufficiently stocked.</p>
+    }
+</div>
+
+<!-- Recent Activity -->
+<div class="panel">
+    <h3>Recent Activity</h3>
+    <ul>
+        @foreach (var item in recentActivity)
+        {
+            <li>@item</li>
+        }
+    </ul>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <button class="btn btn-primary" @onclick="() => NavTo("/sales")">Add Sale</button>
+    <button class="btn btn-primary" @onclick="() => NavTo("/deliveries")">Add Delivery</button>
+    <button class="btn btn-primary" @onclick="() => NavTo("/products")">Add Product</button>
+</div>
+
+@code {
+    private List<ProductDto> products = new();
+    private List<SaleRecordDto> sales = new();
+    private List<DeliveryDto> deliveries = new();
+
+    private int totalProducts;
+    private int totalUnits;
+    private int lowStockCount;
+    private int outOfStockCount;
+
+    private List<ProductDto> lowStock = new();
+    private List<string> recentActivity = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products") ?? new();
+        sales = await Http.GetFromJsonAsync<List<SaleRecordDto>>("api/sales") ?? new();
+        deliveries = await Http.GetFromJsonAsync<List<DeliveryDto>>("api/deliveries") ?? new();
+
+        ComputeSummary();
+        BuildRecentActivity();
+        await RenderStockMovementChart();
+    }
+
+    private void ComputeSummary()
+    {
+        totalProducts = products.Count;
+        totalUnits = products.Sum(p => p.Stock);
+
+        lowStock = products.Where(p => p.Stock > 0 && p.Stock <= 5).ToList();
+        lowStockCount = lowStock.Count;
+
+        outOfStockCount = products.Count(p => p.Stock == 0);
+    }
+
+    private void BuildRecentActivity()
+    {
+        var saleEvents = sales
+            .OrderByDescending(s => s.Date)
+            .Take(5)
+            .Select(s => $"{s.Date.ToShortDateString()} — Sold {s.Quantity} × {s.Product?.Name}");
+
+        var deliveryEvents = deliveries
+            .OrderByDescending(d => d.Date)
+            .Take(5)
+            .Select(d => $"{d.Date.ToShortDateString()} — Received {d.Quantity} × {d.Product?.Name}");
+
+        recentActivity = saleEvents
+            .Concat(deliveryEvents)
+            .OrderByDescending(e => e)
+            .Take(8)
+            .ToList();
+    }
+
+    private async Task RenderStockMovementChart()
+    {
+        var salesMonthly = sales
+            .GroupBy(s => new { s.Date.Year, s.Date.Month })
+            .Select(g => new { Label = $"{g.Key.Month}/{g.Key.Year}", Total = g.Sum(s => s.Quantity) })
+            .ToList();
+
+        var deliveriesMonthly = deliveries
+            .GroupBy(d => new { d.Date.Year, d.Date.Month })
+            .Select(g => new { Label = $"{g.Key.Month}/{g.Key.Year}", Total = g.Sum(d => d.Quantity) })
+            .ToList();
+
+        await JS.InvokeVoidAsync("renderStockMovementChart", salesMonthly, deliveriesMonthly);
+    }
+
+    private void NavTo(string url)
+    {
+        NavigationManager.NavigateTo(url);
+    }
+
+    public class ProductDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public int Stock { get; set; }
+    }
+
+    public class SaleRecordDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public ProductDto? Product { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class DeliveryDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public ProductDto? Product { get; set; }
+        public int Quantity { get; set; }
+    }
+}
