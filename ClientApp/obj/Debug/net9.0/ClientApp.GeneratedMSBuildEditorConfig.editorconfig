@@ -52,6 +52,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/Losses.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9zc2VzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Volumes/ESCAPR/Visual Studio Code Projects/Full-Stack Module Project/FullStackApp/ClientApp/Pages/OrderHistory.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvT3JkZXJIaXN0b3J5LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

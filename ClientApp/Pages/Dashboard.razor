@@ -1,6 +1,8 @@
 @page "/dashboard"
 @inject HttpClient Http
 @inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+@layout MainLayout
 
 <h2 class="page-title">Dashboard</h2>
 
@@ -65,9 +67,9 @@
 
 <!-- Quick Actions -->
 <div class="quick-actions">
-    <button class="btn btn-primary" @onclick="() => NavTo("/sales")">Add Sale</button>
-    <button class="btn btn-primary" @onclick="() => NavTo("/deliveries")">Add Delivery</button>
-    <button class="btn btn-primary" @onclick="() => NavTo("/products")">Add Product</button>
+    <button class="btn btn-primary" @onclick="() => NavTo('/sales')" >View Sales</button>
+    <button class="btn btn-primary" @onclick="() => NavTo('/deliveries')" >View Deliveries</button>
+    <button class="btn btn-primary" @onclick="() => NavTo('/fetchproducts')" >View Products</button>
 </div>
 
 @code {
@@ -144,6 +146,10 @@
         NavigationManager.NavigateTo(url);
     }
 
+    /* -----------------------------
+       DTOs (local for now)
+       ----------------------------- */
+
     public class ProductDto
     {
         public int Id { get; set; }
@@ -167,5 +173,7 @@
         public int ProductId { get; set; }
         public ProductDto? Product { get; set; }
         public int Quantity { get; set; }
+        public string Supplier { get; set; } = "";
+        public string Notes { get; set; } = "";
     }
 }

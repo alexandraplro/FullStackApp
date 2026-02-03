@@ -1,6 +1,8 @@
 @page "/deliveries"
 @inject HttpClient Http
 @inject IJSRuntime JS
+@layout MainLayout
+@using ClientApp.Models
 
 <h3 class="page-title">Deliveries</h3>
 
@@ -43,10 +45,10 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th @onclick="() => ApplySort("date")">Date</th>
-            <th @onclick="() => ApplySort("product")">Product</th>
-            <th @onclick="() => ApplySort("quantity")">Quantity</th>
-            <th @onclick="() => ApplySort("supplier")">Supplier</th>
+            <th @onclick="() => ApplySort('date')">
+            <th @onclick="() => ApplySort('product')">
+            <th @onclick="() => ApplySort('quantity')">
+            <th @onclick="() => ApplySort('supplier')">
             <th>Notes</th>
         </tr>
     </thead>
@@ -264,22 +266,5 @@
             showNewDeliveryModal = false;
             await LoadDeliveries();
         }
-    }
-
-    public class DeliveryDto
-    {
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public int ProductId { get; set; }
-        public ProductDto? Product { get; set; }
-        public int Quantity { get; set; }
-        public string Supplier { get; set; } = string.Empty;
-        public string Notes { get; set; } = string.Empty;
-    }
-
-    public class ProductDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
     }
 }

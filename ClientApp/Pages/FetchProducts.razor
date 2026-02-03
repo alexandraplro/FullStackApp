@@ -117,7 +117,7 @@
 
             <div class="modal-field">
                 <label>Shipment Type</label>
-                <select @bind="order.ShipmentType" @onchange="RecalculateTotals">
+                <select @bind="order.ShipmentType" @bind:after="RecalculateTotals">
                     <option value="InState">In-State</option>
                     <option value="OutOfState">Out-of-State</option>
                     <option value="International">International</option>

@@ -1,0 +1,296 @@
+@page "/losses"
+@inject HttpClient Http
+@inject IJSRuntime JS
+@layout MainLayout
+
+<h3 class="page-title">Losses / Adjustments</h3>
+
+<div class="filters-container">
+    <div class="filter-group">
+        <label>Product</label>
+        <select @bind="filterProductId">
+            <option value="">All</option>
+            @foreach (var p in products)
+            {
+                <option value="@p.Id">@p.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>Type</label>
+        <select @bind="filterType">
+            <option value="">All</option>
+            <option value="Damaged">Damaged</option>
+            <option value="Lost">Lost</option>
+            <option value="Returned">Returned</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label>From</label>
+        <input type="date" @bind="filterFrom" />
+    </div>
+
+    <div class="filter-group">
+        <label>To</label>
+        <input type="date" @bind="filterTo" />
+    </div>
+
+    <button class="btn btn-secondary" @onclick="ClearFilters">Clear</button>
+    <button class="btn btn-primary" @onclick="ShowNewLossModal">New Loss</button>
+</div>
+
+<div class="summary-bar">
+    <div>Total Records: <strong>@losses.Count</strong></div>
+    <div>Total Units Lost: <strong>@totalUnits</strong></div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th @onclick="() => ApplySort('date')">
+            <th @onclick="() => ApplySort('product')">
+            <th @onclick="() => ApplySort('quantity')">
+            <th @onclick="() => ApplySort('type')">
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var l in losses)
+        {
+            <tr>
+                <td>@l.Date.ToShortDateString()</td>
+                <td>@l.Product?.Name</td>
+                <td>@l.Quantity</td>
+                <td>@l.Type</td>
+                <td>@l.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<canvas id="lossesChart" width="400" height="200"></canvas>
+
+@if (showNewLossModal)
+{
+    <div class="modal-backdrop">
+        <div class="modal-container">
+            <h4>New Loss Record</h4>
+
+            <div class="modal-field">
+                <label>Date</label>
+                <input type="date" @bind="newLoss.Date" />
+            </div>
+
+            <div class="modal-field">
+                <label>Product</label>
+                <select @bind="newLoss.ProductId">
+                    <option value="">Select product</option>
+                    @foreach (var p in products)
+                    {
+                        <option value="@p.Id">@p.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label>Quantity</label>
+                <input type="number" @bind="newLoss.Quantity" />
+            </div>
+
+            <div class="modal-field">
+                <label>Type</label>
+                <select @bind="newLoss.Type">
+                    <option value="Damaged">Damaged</option>
+                    <option value="Lost">Lost</option>
+                    <option value="Returned">Returned</option>
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label>Notes</label>
+                <textarea @bind="newLoss.Notes"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" @onclick="CloseNewLossModal">Cancel</button>
+                <button class="btn-primary" @onclick="SubmitNewLoss">Save</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<LossDto> losses = new();
+    private List<ProductDto> products = new();
+
+    private string? filterProductId;
+    private string? filterType;
+    private DateTime? filterFrom;
+    private DateTime? filterTo;
+
+    private string currentSort = "date";
+    private bool sortAscending = false;
+
+    private int totalUnits = 0;
+
+    private bool showNewLossModal = false;
+
+    private LossDto newLoss = new()
+    {
+        Date = DateTime.Now,
+        Type = "Damaged"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Http.GetFromJsonAsync<List<ProductDto>>("api/products");
+        await LoadLosses();
+    }
+
+    private async Task LoadLosses()
+    {
+        var data = await Http.GetFromJsonAsync<List<LossDto>>("api/losses");
+        losses = data ?? new();
+        ApplyFilters();
+        ComputeTotals();
+        await RenderCharts();
+    }
+
+    private void ApplyFilters()
+    {
+        var query = losses.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(filterProductId) &&
+            int.TryParse(filterProductId, out int pid))
+        {
+            query = query.Where(l => l.ProductId == pid);
+        }
+
+        if (!string.IsNullOrWhiteSpace(filterType))
+        {
+            query = query.Where(l => l.Type == filterType);
+        }
+
+        if (filterFrom.HasValue)
+        {
+            query = query.Where(l => l.Date >= filterFrom.Value);
+        }
+
+        if (filterTo.HasValue)
+        {
+            query = query.Where(l => l.Date <= filterTo.Value);
+        }
+
+        losses = query.ToList();
+        SortLosses();
+        ComputeTotals();
+        _ = RenderCharts();
+    }
+
+    private void ClearFilters()
+    {
+        filterProductId = null;
+        filterType = null;
+        filterFrom = null;
+        filterTo = null;
+
+        _ = LoadLosses();
+    }
+
+    private void ApplySort(string field)
+    {
+        if (currentSort == field)
+            sortAscending = !sortAscending;
+        else
+        {
+            currentSort = field;
+            sortAscending = true;
+        }
+
+        SortLosses();
+        _ = RenderCharts();
+    }
+
+    private void SortLosses()
+    {
+        losses = currentSort switch
+        {
+            "product" => sortAscending
+                ? losses.OrderBy(l => l.Product?.Name).ToList()
+                : losses.OrderByDescending(l => l.Product?.Name).ToList(),
+
+            "quantity" => sortAscending
+                ? losses.OrderBy(l => l.Quantity).ToList()
+                : losses.OrderByDescending(l => l.Quantity).ToList(),
+
+            "type" => sortAscending
+                ? losses.OrderBy(l => l.Type).ToList()
+                : losses.OrderByDescending(l => l.Type).ToList(),
+
+            _ => sortAscending
+                ? losses.OrderBy(l => l.Date).ToList()
+                : losses.OrderByDescending(l => l.Date).ToList(),
+        };
+    }
+
+    private void ComputeTotals()
+    {
+        totalUnits = losses.Sum(l => l.Quantity);
+    }
+
+    private async Task RenderCharts()
+    {
+        var monthly = losses
+            .GroupBy(l => new { l.Date.Year, l.Date.Month })
+            .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
+            .Select(g => new
+            {
+                Label = $"{g.Key.Month}/{g.Key.Year}",
+                Total = g.Sum(l => l.Quantity)
+            })
+            .ToList();
+
+        await JS.InvokeVoidAsync("renderLossesChart", monthly);
+    }
+
+    private void ShowNewLossModal()
+    {
+        newLoss = new LossDto { Date = DateTime.Now, Type = "Damaged" };
+        showNewLossModal = true;
+    }
+
+    private void CloseNewLossModal()
+    {
+        showNewLossModal = false;
+    }
+
+    private async Task SubmitNewLoss()
+    {
+        var response = await Http.PostAsJsonAsync("api/losses", newLoss);
+
+        if (response.IsSuccessStatusCode)
+        {
+            showNewLossModal = false;
+            await LoadLosses();
+        }
+    }
+
+    public class LossDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int ProductId { get; set; }
+        public ProductDto? Product { get; set; }
+        public int Quantity { get; set; }
+        public string Type { get; set; } = "Damaged";
+        public string Notes { get; set; } = string.Empty;
+    }
+
+    public class ProductDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+}

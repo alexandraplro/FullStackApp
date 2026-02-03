@@ -33,7 +33,6 @@ else
                     <td>@o.Date.ToShortDateString()</td>
                     <td>@o.Product?.Name</td>
                     <td>@o.Quantity</td>
-                    <td>@o.ShipmentType</td>
                     <td>$@o.Total</td>
                 </tr>
             }
@@ -48,4 +47,5 @@ else
     {
         orders = await Http.GetFromJsonAsync<List<SaleRecordDto>>("api/sales");
     }
+
 }

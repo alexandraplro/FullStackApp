@@ -639,3 +639,37 @@ a:hover {
     to   { transform: scale(1); }
 }
 
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    background: #f7f7f0;
+    border-radius: 10px;
+    border: 1px solid var(--brand-green-light);
+}
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--brand-green);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-weight: 600;
+    color: var(--brand-gray);
+}
+
+.profile-role {
+    font-size: 0.85rem;
+    color: var(--brand-green);
+}
+
