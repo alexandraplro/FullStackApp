@@ -44,7 +44,7 @@
         <ul>
             @foreach (var p in lowStock)
             {
-                <li>@p.Name — @p.Stock units left</li>
+                <li>@p.Name - @p.Stock units left</li>
             }
         </ul>
     }
@@ -112,12 +112,12 @@
         var saleEvents = sales
             .OrderByDescending(s => s.Date)
             .Take(5)
-            .Select(s => $"{s.Date.ToShortDateString()} — Sold {s.Quantity} × {s.Product?.Name}");
+            .Select(s => $"{s.Date.ToShortDateString()} - Sold {s.Quantity} x {s.Product?.Name}");
 
         var deliveryEvents = deliveries
             .OrderByDescending(d => d.Date)
             .Take(5)
-            .Select(d => $"{d.Date.ToShortDateString()} — Received {d.Quantity} × {d.Product?.Name}");
+            .Select(d => $"{d.Date.ToShortDateString()} - Received {d.Quantity} x {d.Product?.Name}");
 
         recentActivity = saleEvents
             .Concat(deliveryEvents)
